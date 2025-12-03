@@ -69,18 +69,17 @@ app.use((req, res, next) => {
 
 // ========================================================== RUTAS ==========================================================
 // Importar rutas
-// const viewsRoutes = require("./routes/viewsRoutes");
-// const authRoutes = require("./routes/authRoutes");
-// const favoritesRoutes = require("./routes/favoritesRoutes");
-// const userRoutes = require("./routes/userRoutes");
-// const filmsRoutes = require("./routes/filmsRoutes");
+// const authRoutes = require('./routes/auth.routes');
+// const userRoutes = require('./routes/user.routes');
+const pueblosRoutes = require('./src/routes/pueblosRoutes');
+// const eventosRoutes = require('./routes/eventos.routes');
+// const favoritosRoutes = require('./routes/favoritos.routes');
 
-// app.use("/", viewsRoutes);
-// app.use("/", authRoutes);
-// app.use("/", favoritesRoutes);
-// app.use("/", userRoutes);
-// app.use("/", filmsRoutes);
-
+// app.use(authRoutes);
+// app.use(userRoutes);
+app.use(pueblosRoutes);
+// app.use(eventosRoutes);
+// app.use(favoritosRoutes);
 // ========================================================== RUTA RAÍZ ==========================================================
 app.get("/", (req, res) => {
   if (req.user) {
