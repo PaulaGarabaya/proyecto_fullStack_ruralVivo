@@ -72,13 +72,13 @@ app.use((req, res, next) => {
 // const authRoutes = require('./routes/auth.routes');
 // const userRoutes = require('./routes/user.routes');
 const pueblosRoutes = require('./src/routes/pueblosRoutes');
-// const eventosRoutes = require('./routes/eventos.routes');
+const eventosRoutes = require('./src/routes/eventosRoutes');
 // const favoritosRoutes = require('./routes/favoritos.routes');
 
 // app.use(authRoutes);
 // app.use(userRoutes);
 app.use(pueblosRoutes);
-// app.use(eventosRoutes);
+app.use(eventosRoutes);
 // app.use(favoritosRoutes);
 // ========================================================== RUTA RAÍZ ==========================================================
 app.get("/", (req, res) => {
