@@ -1,10 +1,10 @@
-.pueblo-details {
+.evento-details {
   max-width: 900px;
   margin: 0 auto;
   padding: 24px;
 }
 
-.pueblo-details img {
+.evento-img {
   width: 100%;
   max-height: 300px;
   object-fit: cover;
@@ -12,13 +12,24 @@
   margin-bottom: 20px;
 }
 
-.pueblo-info {
+.evento-info {
   font-size: 1.1rem;
   margin-bottom: 12px;
   color: #333;
 }
 
-.pueblos-loading {
+.evento-pueblo-info {
+  margin: 10px 0;
+  padding: 10px;
+  background: #f3f3f3;
+  border-radius: 8px;
+}
+
+.evento-map-container {
+  margin-top: 25px;
+}
+
+.eventos-loading {
   display: flex;
   justify-content: center; /* Centrado horizontal */
   align-items: center;     /* Centrado vertical */

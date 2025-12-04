@@ -1,29 +1,11 @@
-/* src/components/Search/Search.css */
-input {
-  padding: 8px;
-  margin-right: 10px;
+.eventos-container {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  text-align: center;
 }
 
-button {
-  padding: 8px 16px;
-  background-color: #f1e6c9;
-  box-shadow: 0 2px 4px #624a2e;
-  color: #8C6A43;
-  border: none;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: #624a2e;
-}
-.pueblos-container {
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 24px;
-}
-
-.pueblos-title {
+.eventos-title {
   font-size: 60px;
   font-weight: 700;
   margin-bottom: 20px;
@@ -32,7 +14,7 @@ button:hover {
   /* Sombra ligera para destacar sobre el fondo */
   text-shadow: 10px 10px 10px rgba(0,0,0,0.15);
 }
-.pueblos-title::after {
+.eventos-title::after {
   content: "";
   display: block;
   width: 100px;                 /* longitud de la línea */
@@ -41,10 +23,9 @@ button:hover {
   margin: 8px auto 0 auto;     /* centrado */
   border-radius: 2px;
 }
-
-.loading-text {
+.eventos-loading {
   display: flex;
   justify-content: center; /* Centrado horizontal */
   align-items: center;     /* Centrado vertical */
-  height: 200px;
+  height: 200px;  
 }

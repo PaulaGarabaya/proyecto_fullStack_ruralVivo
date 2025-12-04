@@ -1,0 +1,74 @@
+.nav {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+/* Links Desktop */
+.nav-links {
+  display: flex;
+  gap: 20px;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #624a2e;
+  font-weight: 500;
+}
+
+.nav-links a:hover {
+  color: #B35A2C;
+}
+
+.logout-btn {
+  background: transparent;
+  border: none;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  color: #333;
+}
+
+.logout-btn:hover {
+  color: #B35A2C;
+}
+
+/* Botón hamburguesa */
+.hamburger {
+  display: none; /* solo móvil */
+  background: transparent;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  z-index: 10000;
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+  .hamburger {
+    display: block;
+  }
+
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: #fff;
+    flex-direction: column;
+    width: 200px;
+    padding: 10px 0;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    z-index: 9999;
+  }
+
+  .nav-links.open {
+    display: flex;
+  }
+
+  .nav-links a,
+  .logout-btn {
+    padding: 10px 20px;
+  }
+}

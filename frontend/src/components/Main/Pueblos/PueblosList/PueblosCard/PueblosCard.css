@@ -1,0 +1,32 @@
+.pueblo-card {
+  display: block;
+  width: 220px;
+  height: 220px;
+  border-radius: 12px;
+  overflow: hidden;
+  text-decoration: none;
+  color: white;
+  position: relative;
+  background-image: url(${pueblo.img_url});
+  background-size: cover;
+  background-position: center;
+  box-shadow: "0 4px 6px rgba(0,0,0,0.3)";
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.pueblo-card:hover {
+  transform: scale(1.04);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35);
+}
+
+.pueblo-card-title {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background: linear-gradient(0deg, rgba(0,0,0,0.7), rgba(0,0,0,0));
+  background: "rgba(0,0,0,0.5)";
+  text-align: center;
+  padding: 8px 0;
+  font-weight: bold;
+  font-size: 1.1rem;
+}

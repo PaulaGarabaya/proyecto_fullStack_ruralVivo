@@ -1,10 +1,11 @@
 import React from "react";
+import './PueblosCard.css'
 import { Link } from "react-router-dom";
 
 const PueblosCard = ({ pueblo }) => {
   return (
     <Link
-      to={`/pueblos/${pueblo.pueblo_id}`}
+      to={`/pueblo/${pueblo.pueblo_id}`}
       style={{
         display: "block",
         width: "200px",

@@ -1,9 +1,10 @@
 import React from "react";
+import './PueblosList.css'
 import PueblosCard from "./PueblosCard";
 
 const PueblosList = ({ pueblos }) => {
   return (
-    <div style={{ display: "flex", flexWrap: "wrap", gap: "16px" }}>
+    <div className="pueblos-list">
       {pueblos.map((pueblo) => (
         <PueblosCard key={pueblo.pueblo_id} pueblo={pueblo} />
       ))}
