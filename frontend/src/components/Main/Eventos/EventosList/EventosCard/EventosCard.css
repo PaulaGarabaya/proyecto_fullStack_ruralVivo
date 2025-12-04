@@ -1,0 +1,50 @@
+.evento-card {
+  width: 260px;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  text-decoration: none;
+  color: #333;
+  display: block;
+}
+
+.evento-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.25);
+}
+
+.evento-card-img {
+  height: 150px;
+  background-size: cover;
+  background-position: center;
+}
+
+.evento-card-content {
+  padding: 14px;
+}
+
+.evento-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+.evento-pueblo {
+  font-size: 0.95rem;
+  color: #666;
+  margin-bottom: 6px;
+}
+
+.evento-fecha {
+  font-size: 0.9rem;
+  color: #444;
+  margin-bottom: 6px;
+}
+
+.evento-descripcion {
+  font-size: 0.9rem;
+  line-height: 1.3rem;
+  color: #555;
+}

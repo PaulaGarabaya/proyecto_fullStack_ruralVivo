@@ -1,20 +1,21 @@
-.search-container {
+.eventos-search-container {
   display: flex;
   justify-content: center;
   margin-bottom: 20px;
 }
 
-.search-input {
-  width: 280px;
+.eventos-select {
   padding: 10px 14px;
   border-radius: 25px;
   border: 1px solid #aaa;
   font-size: 1rem;
   outline: none;
+  cursor: pointer;
+  background: #f1e6c9;
   transition: 0.2s ease;
 }
 
-.search-input:focus {
+.eventos-select:focus {
   border-color: #333;
   box-shadow: 0 0 4px rgba(0,0,0,0.2);
 }

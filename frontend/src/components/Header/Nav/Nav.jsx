@@ -1,46 +1,58 @@
-// import React, { useState } from "react";
-// import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import "./Nav.css";
 
-// const Nav = () => {
-//   const [isMenuOpen, setIsMenuOpen] = useState(false);
+const Nav = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [user, setUser] = useState(null);
 
-//   const toggleMenu = () => {
-//     setIsMenuOpen(!isMenuOpen);
-//   };
+  // Comprobar si hay usuario logado
+  useEffect(() => {
+    const checkUser = () => {
+      const token = localStorage.getItem("token");
+      if (token) {
+        setUser({ nombre: "Juan" }); // Reemplaza con fetch real si quieres
+      }
+    };
+    checkUser();
+  }, []);
 
-//   return (
-//     <nav className={`nav-bar ${isMenuOpen ? "active" : ""}`}>
-//       <button className="hamburger-menu" onClick={toggleMenu} aria-label="Toggle navigation menu">
-//         &#9776;
-//       </button>
-//       <ul>
-//         <li>
-//           <Link to="/">Home</Link>
-//         </li>
-//         <li>
-//           <Link to="/about">About</Link>
-//         </li>
-//         <li>
-//           <Link to="/christmaslist">Lista</Link>
-//         </li>
-//         <li>
-//           <Link to="/contact">Contacto</Link>
-//         </li>
-//         <li>
-//           <Link to="/product">Producto</Link>
-//         </li>
-//         <li>
-//           <Link to="/staff">Equipo</Link>
-//         </li>
-//         <li>
-//           <Link to="/topic">Temas</Link>
-//         </li>
-//         <li>
-//           <Link to="/wishlist">Deseos</Link>
-//         </li>
-//       </ul>
-//     </nav>
-//   );
-// };
+  const toggleMenu = () => setIsOpen(!isOpen);
 
-// export default Nav;
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setUser(null);
+    setIsOpen(false);
+  };
+
+  return (
+    <nav className="nav">
+      {/* BOTÓN HAMBURGUESA SIEMPRE VISIBLE */}
+      <button className="hamburger" onClick={toggleMenu}>
+        ☰
+      </button>
+
+      {/* LINKS */}
+      <div className={`nav-links ${isOpen ? "open" : ""}`}>
+        <Link to="/" onClick={() => setIsOpen(false)}>Inicio</Link>
+        <Link to="/pueblos" onClick={() => setIsOpen(false)}>Pueblos</Link>
+        <Link to="/eventos" onClick={() => setIsOpen(false)}>Eventos</Link>
+
+        {user ? (
+          <>
+            <Link to="/favoritos" onClick={() => setIsOpen(false)}>Favoritos</Link>
+            <Link to="/perfil" onClick={() => setIsOpen(false)}>Perfil</Link>
+            <button className="logout-btn" onClick={handleLogout}>Cerrar sesión</button>
+          </>
+        ) : (
+          <>
+            <Link to="/login" onClick={() => setIsOpen(false)}>Iniciar sesión</Link>
+            <Link to="/registro" onClick={() => setIsOpen(false)}>Registrarse</Link>
+          </>
+        )}
+      </div>
+    </nav>
+  );
+};
+
+export default Nav;
