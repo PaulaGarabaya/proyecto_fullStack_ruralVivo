@@ -1,21 +1,23 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const PuebloCard = ({ pueblo }) => {
+const PueblosCard = ({ pueblo }) => {
   return (
-    <div
+    <Link
+      to={`/pueblos/${pueblo.pueblo_id}`}
       style={{
-        position: "relative",
+        display: "block",
         width: "200px",
-        height: "150px",
-        borderRadius: "8px",
+        height: "200px",
+        borderRadius: "12px",
         overflow: "hidden",
-        boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
+        textDecoration: "none",
+        color: "white",
+        position: "relative",
         backgroundImage: `url(${pueblo.img_url})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
-        color: "white",
-        textShadow: "1px 1px 2px rgba(0,0,0,0.7)"
+        boxShadow: "0 4px 6px rgba(0,0,0,0.3)",
       }}
     >
       <div
@@ -24,30 +26,15 @@ const PuebloCard = ({ pueblo }) => {
           bottom: "0",
           width: "100%",
           background: "rgba(0,0,0,0.5)",
-          padding: "8px",
-          textAlign: "center"
+          textAlign: "center",
+          padding: "8px 0",
+          fontWeight: "bold",
         }}
       >
-        <h4 style={{ margin: 0 }}>{pueblo.nombre}</h4>
+        {pueblo.nombre}
       </div>
-      <Link
-        to={`/pueblos/${pueblo._id}`}
-        style={{
-          position: "absolute",
-          top: "8px",
-          right: "8px",
-          background: "rgba(255,255,255,0.7)",
-          color: "#000",
-          padding: "4px 8px",
-          borderRadius: "4px",
-          textDecoration: "none",
-          fontSize: "12px"
-        }}
-      >
-        Ver detalles
-      </Link>
-    </div>
+    </Link>
   );
 };
 
-export default PuebloCard;
+export default PueblosCard;

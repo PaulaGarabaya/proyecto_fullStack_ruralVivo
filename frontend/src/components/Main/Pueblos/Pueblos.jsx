@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Search from "./Search";
-import PueblosList from "./PueblosList"; // Antes PokemonList
-import { getPueblos } from "../../../services/pueblosService"; // Tu service con async/await
+import PueblosList from "./PueblosList"; 
+import { getPueblos } from "../../../services/pueblosService"; 
 
 const PueblosContainer = () => {
   const [pueblosList, setPueblosList] = useState([]);

@@ -1,11 +1,11 @@
 import React from "react";
-import PuebloCard from "./PueblosCard"; // Antes PokemonCard
+import PueblosCard from "./PueblosCard";
 
 const PueblosList = ({ pueblos }) => {
   return (
     <div style={{ display: "flex", flexWrap: "wrap", gap: "16px" }}>
       {pueblos.map((pueblo) => (
-        <PueblosCard key={pueblo._id} pueblo={pueblo} />
+        <PueblosCard key={pueblo.pueblo_id} pueblo={pueblo} />
       ))}
     </div>
   );
