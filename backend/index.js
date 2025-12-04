@@ -1,5 +1,6 @@
 // app.js
 const express = require("express");
+const cors = require('cors');
 const cowsay = require("cowsay");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
@@ -10,11 +11,14 @@ const swaggerUi = require("swagger-ui-express");
 //const swaggerSpec = require("./config/swagger");
 
 require("dotenv").config();
-//require("./config/googleAuthConfig"); // Passport Google Strategy
+require("./src/config/googleAuth"); // Passport Google Strategy
 
 // ========================================================== INICIALIZACIÓN ==========================================================
 const app = express();
-
+// Permitir solicitudes desde cualquier origen (solo desarrollo)
+app.use(cors());
+// Middleware para JSON
+app.use(express.json());
 // VERIFICACIÓN DE VARIABLES DE ENTORNO
 // console.log('=== VERIFICACIÓN VARIABLES ENTORNO ===');
 // console.log('PORT:', process.env.PORT || 'NO DEFINIDO');
@@ -37,7 +41,7 @@ const port = process.env.PORT || 3000;
 //app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 // app.use(express.static("public"));
-// app.use(cookieParser());
+app.use(cookieParser());
 
 // Session middleware
 app.use(
@@ -69,13 +73,13 @@ app.use((req, res, next) => {
 
 // ========================================================== RUTAS ==========================================================
 // Importar rutas
-// const authRoutes = require('./routes/auth.routes');
+const authRoutes = require('./src/routes/authRoutes');
 // const userRoutes = require('./routes/user.routes');
 const pueblosRoutes = require('./src/routes/pueblosRoutes');
 const eventosRoutes = require('./src/routes/eventosRoutes');
 // const favoritosRoutes = require('./routes/favoritos.routes');
 
-// app.use(authRoutes);
+app.use('/api', authRoutes);
 // app.use(userRoutes);
 app.use(pueblosRoutes);
 app.use(eventosRoutes);
