@@ -1,5 +1,6 @@
 // app.js
 const express = require("express");
+const cors = require('cors');
 const cowsay = require("cowsay");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
@@ -52,6 +53,9 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+// Permitir solicitudes desde cualquier origen (solo en desarrollo)
+app.use(cors());
+
 // Middleware JWT seguro
 app.use((req, res, next) => {
   const token = req.cookies?.token;
@@ -66,7 +70,8 @@ app.use((req, res, next) => {
   }
   next();
 });
-
+// Middleware para JSON
+app.use(express.json());
 // ========================================================== RUTAS ==========================================================
 // Importar rutas
 // const viewsRoutes = require("./routes/viewsRoutes");
