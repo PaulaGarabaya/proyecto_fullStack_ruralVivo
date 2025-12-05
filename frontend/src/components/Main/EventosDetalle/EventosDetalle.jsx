@@ -6,6 +6,7 @@ import { getPueblo } from "../../../services/pueblosService"; // Servicio para o
 import Map from "./Map"; // Importar el componente del mapa
 import { RotatingLines } from 'react-loader-spinner'
 
+
 const EventoDetails = () => {
   const { id } = useParams(); // Obtener el id del evento desde la URL
   const location = useLocation();
@@ -90,7 +91,7 @@ const EventoDetails = () => {
       <p><strong>Fecha de inicio:</strong> {evento.fecha_inicio}</p>
       <p><strong>Fecha de fin:</strong> {evento.fecha_fin}</p>
       {evento.url && (
-        <a href={evento.url} target="_blank" rel="noopener noreferrer">Ver imagen</a>
+        <a href={evento.url} target="_blank" rel="noopener noreferrer">Ver Programa</a>
       )}
 
       {/* Mostrar el nombre del pueblo y la provincia si están disponibles */}
@@ -126,3 +127,45 @@ const EventoDetails = () => {
 };
 
 export default EventoDetails;
+
+
+//////////////////////BORRAR Y EDITAR///////////////////////////////// No termina de hacerlo
+// import React, { useContext } from "react";
+// import { useNavigate } from "react-router-dom";
+// import { UserContext } from "../../../context/UserContext";
+// import { deleteEvento } from "../../../services/eventosService";
+// import Map from "./Map";
+
+// const EventoDetailsActions = ({ evento }) => {
+//   const { user } = useContext(UserContext);
+//   const navigate = useNavigate();
+
+//   const canEditOrDelete = evento.user_id === user.user_id || user.role === "admin";
+
+//   const handleDelete = async () => {
+//     if (window.confirm("¿Deseas eliminar este evento?")) {
+//       try {
+//         await deleteEvento(evento.evento_id);
+//         alert("Evento eliminado");
+//         navigate("/eventos"); // volver al listado
+//       } catch (err) {
+//         alert(err.message);
+//       }
+//     }
+//   };
+
+//   const handleEdit = () => {
+//     navigate(`/evento/${evento.evento_id}/edit`);
+//   };
+
+//   if (!canEditOrDelete) return null;
+
+//   return (
+//     <div className="evento-actions">
+//       <button onClick={handleEdit}>Editar</button>
+//       <button onClick={handleDelete}>Eliminar</button>
+//     </div>
+//   );
+// };
+
+// export default EventoDetailsActions;

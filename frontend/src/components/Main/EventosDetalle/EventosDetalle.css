@@ -55,3 +55,21 @@
   border-radius: 8px;
   object-fit: cover;
 }
+.evento-actions {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+}
+
+.evento-actions button {
+  padding: 8px 12px;
+  border: none;
+  background-color: #8C6A43;
+  color: white;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.evento-actions button:hover {
+  background-color: #6b4f33;
+}
