@@ -10,6 +10,9 @@ import Eventos from './components/Main/Eventos';  // Componente para la lista de
 import EventoDetails from './components/Main/EventosDetalle'; // Componente para el detalle de un evento
 import Singup from './components/Main/Singup';
 import Login from './components/Main/Login';
+import CrearEventos from './components/Main/CreateEvent';
+import Favoritos from './components/Main/Favoritos';
+// import Home from './components/Main/Home';
 
 
 function App() {
@@ -49,6 +52,9 @@ function App() {
         <Route path="/evento/:id" element={<EventoDetails />} />
         <Route path="/singup" element={<Singup />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/crear-eventos" element={<CrearEventos />} />
+        <Route path="/favoritos" element={<Favoritos />} />
+        {/* <Route path="/" element={<Home />} /> */}
       </Routes>
 
       {/* Footer global */}

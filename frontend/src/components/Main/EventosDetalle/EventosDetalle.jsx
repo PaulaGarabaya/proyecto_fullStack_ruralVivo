@@ -90,7 +90,7 @@ const EventoDetails = () => {
       <p><strong>Fecha de inicio:</strong> {evento.fecha_inicio}</p>
       <p><strong>Fecha de fin:</strong> {evento.fecha_fin}</p>
       {evento.url && (
-        <a href={evento.url} target="_blank" rel="noopener noreferrer">Ver más detalles</a>
+        <a href={evento.url} target="_blank" rel="noopener noreferrer">Ver imagen</a>
       )}
 
       {/* Mostrar el nombre del pueblo y la provincia si están disponibles */}
@@ -114,6 +114,13 @@ const EventoDetails = () => {
 
       {/* Si no hay coordenadas disponibles */}
       {(!lat || !lng) && <p>Coordenadas no disponibles</p>}
+      {/* Imagen a la derecha */}
+      <div className="evento-img-container">
+        <img
+          src={evento.img_url || evento.pueblo_img || '/default.jpg'}
+          alt={evento.titulo}
+        />
+      </div>
     </div>
   );
 };

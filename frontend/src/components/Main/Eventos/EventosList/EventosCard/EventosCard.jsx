@@ -64,7 +64,7 @@ const EventoCard = ({ evento }) => {
     <Link to={`/evento/${evento.evento_id}`} className="evento-card">
       <div
         className="evento-card-img"
-        style={{ backgroundImage: `url(${evento.pueblo_img || evento.img_url})` }}
+        style={{ backgroundImage: `url(${evento.pueblo_img || evento.url})` }}
       />
 
       <div className="evento-card-content">
