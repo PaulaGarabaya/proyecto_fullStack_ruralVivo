@@ -1,60 +1,3 @@
-// import React from "react";
-// import { Link } from "react-router-dom";
-
-// const EventoCard = ({ evento }) => {
-//   return (
-//     <Link
-//       to={`/evento/${evento.evento_id}`}
-//       style={{
-//         display: "block",
-//         width: "200px",
-//         height: "200px",
-//         borderRadius: "12px",
-//         overflow: "hidden",
-//         textDecoration: "none",
-//         color: "white",
-//         position: "relative",
-//         backgroundImage: `url(${evento.img_url || '/path/to/default-image.jpg'})`, // Si no tienes imagen, usar una por defecto
-//         backgroundSize: "cover",
-//         backgroundPosition: "center",
-//         boxShadow: "0 4px 6px rgba(0,0,0,0.3)",
-//       }}
-//     >
-//       <div
-//         style={{
-//           position: "absolute",
-//           bottom: "0",
-//           width: "100%",
-//           background: "rgba(0,0,0,0.5)",
-//           textAlign: "center",
-//           padding: "8px 0",
-//           fontWeight: "bold",
-//         }}
-//       >
-//         {evento.titulo} {/* Aquí mostramos el título del evento */}
-//       </div>
-//       <div
-//         style={{
-//           position: "absolute",
-//           top: "0",
-//           left: "0",
-//           right: "0",
-//           background: "rgba(0,0,0,0.6)",
-//           color: "white",
-//           padding: "4px",
-//           fontSize: "12px",
-//           textAlign: "center",
-//         }}
-//       >
-//         {evento.tipo} {/* Mostramos el tipo de evento */}
-//       </div>
-//     </Link>
-//   );
-// };
-
-// export default EventoCard;
-
-
 import React from "react";
 import "./EventosCard.css";
 import { Link } from "react-router-dom";
@@ -85,3 +28,59 @@ const EventoCard = ({ evento }) => {
 
 
 export default EventoCard;
+
+
+//////////////////////BORRAR Y EDITAR///////////////////////////////// No termina de hacerlo
+// import React, { useContext } from "react";
+// import { Link, useNavigate } from "react-router-dom";
+// import { UserContext } from "../../../context/UserContext";
+// import { deleteEvento } from "../../../services/eventosService";
+// import "./EventosCard.css";
+
+// const EventoCard = ({ evento, onDelete }) => {
+//   const { user } = useContext(UserContext);
+//   const navigate = useNavigate();
+
+//   const handleDelete = async () => {
+//     if (window.confirm("¿Estás seguro de que quieres eliminar este evento?")) {
+//       try {
+//         await deleteEvento(evento.evento_id);
+//         alert("Evento eliminado correctamente");
+//         if (onDelete) onDelete(evento.evento_id); // Actualiza lista
+//       } catch (err) {
+//         alert(err.message);
+//       }
+//     }
+//   };
+
+//   const handleEdit = () => {
+//     navigate(`/evento/${evento.evento_id}/edit`);
+//   };
+
+//   const canEditOrDelete = evento.user_id === user.user_id || user.role === "admin";
+
+//   return (
+//     <div className="evento-card">
+//       <Link to={`/evento/${evento.evento_id}`} className="evento-card-link">
+//         <div
+//           className="evento-card-img"
+//           style={{ backgroundImage: `url(${evento.img_url || evento.pueblo_img || '/default.jpg'})` }}
+//         />
+//         <div className="evento-card-content">
+//           <h3>{evento.titulo}</h3>
+//           <p>{evento.pueblo_nombre || "Pueblo desconocido"}</p>
+//           <p>{evento.fecha_inicio} → {evento.fecha_fin}</p>
+//         </div>
+//       </Link>
+
+//       {canEditOrDelete && (
+//         <div className="evento-card-actions">
+//           <button onClick={handleEdit}>Editar</button>
+//           <button onClick={handleDelete}>Eliminar</button>
+//         </div>
+//       )}
+//     </div>
+//   );
+// };
+
+// export default EventoCard;

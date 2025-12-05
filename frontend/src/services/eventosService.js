@@ -76,6 +76,7 @@ export const updateEvento = async (id, eventoData) => {
     headers: {
       'Content-Type': 'application/json'
     },
+    credentials: "include",
     body: JSON.stringify(eventoData)
   });
 
@@ -88,9 +89,14 @@ export const updateEvento = async (id, eventoData) => {
 };
 
 // Eliminar un evento
-export const deleteEvento = async (id) => {
+export const deleteEvento = async (id, eventoData) => {
   const response = await fetch(`http://localhost:3000/api/eventos/${id}`, {
-    method: 'DELETE'
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    credentials: "include",
+    body: JSON.stringify(eventoData)
   });
 
   if (!response.ok) {
