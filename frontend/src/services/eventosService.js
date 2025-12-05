@@ -50,3 +50,53 @@ export const getEventosByPueblo = async (puebloId) => {
 
   return await response.json();
 };
+// Crear un nuevo evento
+export const createEvento = async (eventoData) => {
+  const response = await fetch('http://localhost:3000/api/eventos', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    credentials: "include",
+    body: JSON.stringify(eventoData)
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Error al crear el evento');
+  }
+
+  return await response.json();
+};
+
+// Editar un evento existente
+export const updateEvento = async (id, eventoData) => {
+  const response = await fetch(`http://localhost:3000/api/eventos/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(eventoData)
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Error al actualizar el evento');
+  }
+
+  return await response.json();
+};
+
+// Eliminar un evento
+export const deleteEvento = async (id) => {
+  const response = await fetch(`http://localhost:3000/api/eventos/${id}`, {
+    method: 'DELETE'
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Error al eliminar el evento');
+  }
+
+  return await response.json();
+};

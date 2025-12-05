@@ -35,3 +35,23 @@
   align-items: center;     /* Centrado vertical */
   height: 200px;  
 }
+.evento-details-container {
+  display: flex;
+  flex-direction: row; /* fila: texto a la izquierda, imagen a la derecha */
+  gap: 20px;
+  align-items: flex-start;
+}
+.evento-text {
+  flex: 1; /* ocupa todo el espacio disponible */
+}
+
+.evento-img-container {
+  flex: 0 0 300px; /* ancho fijo de la imagen */
+}
+
+.evento-img-container img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  object-fit: cover;
+}
