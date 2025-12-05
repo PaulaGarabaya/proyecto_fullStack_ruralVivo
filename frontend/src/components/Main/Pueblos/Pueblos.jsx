@@ -34,7 +34,7 @@ const PueblosContainer = () => {
       <h1 className="pueblos-title">Pueblos</h1>
       <Search pueblosList={pueblosList} setPueblosList={setPueblosList} allPueblos={allPueblos} setAllPueblos={setAllPueblos}/>
       {loading ? (
-        <p className="loading-text"><RotatingLines
+        <span className="loading-text"><RotatingLines
               visible={true}
               height="96"
               width="96"
@@ -44,7 +44,7 @@ const PueblosContainer = () => {
               ariaLabel="rotating-lines-loading"
               wrapperStyle={{}}
               wrapperClass=""
-              /></p>
+              /></span>
       ) : (
         <PueblosList pueblos={pueblosList} />
       )}
