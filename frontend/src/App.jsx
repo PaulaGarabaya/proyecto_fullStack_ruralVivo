@@ -8,6 +8,8 @@ import Pueblos from "./components/Main/Pueblos"
 import PuebloDetails from "./components/Main/PueblosDetalle";
 import Eventos from './components/Main/Eventos';  // Componente para la lista de eventos
 import EventoDetails from './components/Main/EventosDetalle'; // Componente para el detalle de un evento
+import Singup from './components/Main/Singup';
+import Login from './components/Main/Login';
 
 
 function App() {
@@ -45,6 +47,8 @@ function App() {
 
         {/* Ruta para el detalle de un evento */}
         <Route path="/evento/:id" element={<EventoDetails />} />
+        <Route path="/singup" element={<Singup />} />
+        <Route path="/login" element={<Login />} />
       </Routes>
 
       {/* Footer global */}
