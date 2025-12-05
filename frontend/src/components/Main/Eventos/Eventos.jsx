@@ -107,7 +107,7 @@ const EventosContainer = () => {
       <Search pueblos={pueblos} onPuebloChange={handlePuebloChange} />
 
       {loading ? (
-        <p className="eventos-loading"><p className="loading-text"><RotatingLines
+        <span className="eventos-loading"><span className="loading-text"><RotatingLines
               visible={true}
               height="96"
               width="96"
@@ -117,7 +117,7 @@ const EventosContainer = () => {
               ariaLabel="rotating-lines-loading"
               wrapperStyle={{}}
               wrapperClass=""
-              /></p></p>
+              /></span></span>
       ) : (
         <EventosList eventos={eventos} />
       )}

@@ -65,7 +65,7 @@ const EventoDetails = () => {
   }, [id]);
 
   // Si no tenemos datos del evento o del pueblo, mostramos un mensaje
-  if (!evento) return <p className="eventos-loading"><RotatingLines
+  if (!evento) return <span className="eventos-loading"><RotatingLines
               visible={true}
               height="96"
               width="96"
@@ -75,7 +75,7 @@ const EventoDetails = () => {
               ariaLabel="rotating-lines-loading"
               wrapperStyle={{}}
               wrapperClass=""
-              /></p>;
+              /></span>;
 
   // Determinar las coordenadas a usar
   const lat = evento.latitud || (pueblo && pueblo.latitud); // Si el evento no tiene coordenadas, usar las del pueblo

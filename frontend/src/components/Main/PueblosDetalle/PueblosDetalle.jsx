@@ -51,7 +51,7 @@ const PuebloDetails = () => {
     fetchPueblo();
   }, [id]);
 
-  if (!pueblo) return <p className="pueblos-loading"><RotatingLines
+  if (!pueblo) return <span className="pueblos-loading"><RotatingLines
                 visible={true}
                 height="96"
                 width="96"
@@ -61,7 +61,7 @@ const PuebloDetails = () => {
                 ariaLabel="rotating-lines-loading"
                 wrapperStyle={{}}
                 wrapperClass=""
-                /></p>;
+                /></span>;
 
   return (
     <div className="pueblo-details"> 
