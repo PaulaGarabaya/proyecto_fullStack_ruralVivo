@@ -5,6 +5,7 @@ import { getEvento } from "../../../services/eventosService"; // Servicio para o
 import { getPueblo } from "../../../services/pueblosService"; // Servicio para obtener los datos del pueblo
 import Map from "./Map"; // Importar el componente del mapa
 import { RotatingLines } from 'react-loader-spinner'
+import BotonBorrarEditar from "./BotonBorrarEditar"; // Importamos el componente de botones
 
 
 const EventoDetails = () => {
@@ -122,6 +123,8 @@ const EventoDetails = () => {
           alt={evento.titulo}
         />
       </div>
+            {/* Usamos el componente EventActionButtons y le pasamos el id del evento */}
+      <BotonBorrarEditar eventoId={id} />
     </div>
   );
 };
@@ -169,3 +172,139 @@ export default EventoDetails;
 // };
 
 // export default EventoDetailsActions;
+// import React, { useEffect, useState } from "react";
+// import './EventosDetalle.css';
+// import { useParams, useLocation, useNavigate } from "react-router-dom";
+// import { getEvento, deleteEvento } from "../../../services/eventosService"; 
+// import { getPueblo } from "../../../services/pueblosService"; 
+// import { RotatingLines } from 'react-loader-spinner';
+// import {UserProvider} from "../../../context/UserContext"; // Importa tu contexto de usuario
+
+// const EventoDetails = () => {
+//   const { id } = useParams();
+//   const location = useLocation();
+//   const navigate = useNavigate();
+//   const { user } = UserProvider(); // Obtener los datos del usuario desde el contexto
+//   const [evento, setEvento] = useState(null);
+//   const [pueblo, setPueblo] = useState(null);
+
+//   // Parámetros de búsqueda (fallback para valores)
+//   const searchParams = new URLSearchParams(location.search);
+//   const titulo = searchParams.get("titulo");
+//   const tipo = searchParams.get("tipo");
+//   const descripcion = searchParams.get("descripcion");
+//   const fecha_inicio = searchParams.get("fecha_inicio");
+//   const fecha_fin = searchParams.get("fecha_fin");
+//   const url = searchParams.get("url");
+//   const latitud = searchParams.get("latitud");
+//   const longitud = searchParams.get("longitud");
+
+//   useEffect(() => {
+//     const fetchEvento = async () => {
+//       try {
+//         const data = await getEvento(id);
+//         setEvento({
+//           id: data.evento_id,
+//           titulo: data.titulo,
+//           tipo: data.tipo,
+//           descripcion: data.descripcion,
+//           fecha_inicio: data.fecha_inicio,
+//           fecha_fin: data.fecha_fin,
+//           url: data.url,
+//           latitud: data.latitud,
+//           longitud: data.longitud,
+//           pueblo_id: data.pueblo_id,
+//         });
+//         if (data.pueblo_id) {
+//           const puebloData = await getPueblo(data.pueblo_id);
+//           setPueblo(puebloData);
+//         }
+//       } catch (error) {
+//         console.error("Error al cargar evento:", error);
+//         setEvento({
+//           id,
+//           titulo,
+//           tipo,
+//           descripcion,
+//           fecha_inicio,
+//           fecha_fin,
+//           url,
+//           latitud,
+//           longitud,
+//         });
+//       }
+//     };
+
+//     fetchEvento();
+//   }, [id]);
+
+//   if (!evento) return <span className="eventos-loading"><RotatingLines visible={true} height="96" width="96" color="#8C6A43" strokeWidth="5" animationDuration="0.75" ariaLabel="rotating-lines-loading" /></span>;
+
+//   // Comprobar si el usuario tiene permisos para editar o borrar
+//   const canEditOrDelete = evento.user_id === user?.user_id || user?.role === "admin";
+
+//   const handleDelete = async () => {
+//     if (window.confirm("¿Deseas eliminar este evento?")) {
+//       try {
+//         await deleteEvento(evento.evento_id);
+//         alert("Evento eliminado");
+//         navigate("/eventos");
+//       } catch (err) {
+//         alert(err.message);
+//       }
+//     }
+//   };
+
+//   const handleEdit = () => {
+//     navigate(`/evento/${evento.evento_id}/edit`);
+//   };
+
+//   const lat = evento.latitud || (pueblo && pueblo.latitud);
+//   const lng = evento.longitud || (pueblo && pueblo.longitud);
+
+//   return (
+//     <div className="evento-details">
+//       <img className="evento-img" src={evento.pueblo_img} />
+//       <h2 className="evento-info">{evento.titulo}</h2>
+//       <p><strong>Tipo:</strong> {evento.tipo}</p>
+//       <p><strong>Descripción:</strong> {evento.descripcion}</p>
+//       <p><strong>Fecha de inicio:</strong> {evento.fecha_inicio}</p>
+//       <p><strong>Fecha de fin:</strong> {evento.fecha_fin}</p>
+//       {evento.url && (
+//         <a href={evento.url} target="_blank" rel="noopener noreferrer">Ver Programa</a>
+//       )}
+
+//       {pueblo ? (
+//         <>
+//           <p className="evento-pueblo-info"><strong>Pueblo:</strong> {pueblo.nombre}</p>
+//           <p className="evento-pueblo-info"><strong>Provincia:</strong> {pueblo.provincia}</p>
+//         </>
+//       ) : (
+//         <p>No se pudo obtener información del pueblo.</p>
+//       )}
+
+//       {lat && lng && (
+//         <div>
+//           <p><strong>Ubicación:</strong> Latitud: {lat}, Longitud: {lng}</p>
+//           <Map lat={lat} lng={lng} name={evento.titulo} />
+//         </div>
+//       )}
+
+//       {(!lat || !lng) && <p>Coordenadas no disponibles</p>}
+
+//       {/* Mostrar los botones de Editar y Eliminar solo si el usuario tiene permisos */}
+//       {canEditOrDelete && (
+//         <div className="evento-actions">
+//           <button onClick={handleEdit}>Editar</button>
+//           <button onClick={handleDelete}>Eliminar</button>
+//         </div>
+//       )}
+
+//       <div className="evento-img-container">
+//         <img src={evento.img_url || evento.pueblo_img || '/default.jpg'} alt={evento.titulo} />
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default EventoDetails;
