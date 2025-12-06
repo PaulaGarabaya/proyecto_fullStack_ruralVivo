@@ -3,6 +3,10 @@ import "./EventosCard.css";
 import { Link } from "react-router-dom";
 
 const EventoCard = ({ evento }) => {
+  // Extraemos solo la parte de la fecha
+  const fechaInicio = evento.fecha_inicio ? evento.fecha_inicio.split("T")[0] : "";
+  const fechaFin = evento.fecha_fin ? evento.fecha_fin.split("T")[0] : "";
+
   return (
     <Link to={`/evento/${evento.evento_id}`} className="evento-card">
       <div
@@ -16,7 +20,7 @@ const EventoCard = ({ evento }) => {
           {evento.pueblo_nombre || "Pueblo desconocido"} — {evento.pueblo_provincia || ""}
         </p>
         <p className="evento-fecha">
-          {evento.fecha_inicio} → {evento.fecha_fin}
+          {fechaInicio} → {fechaFin}
         </p>
         <p className="evento-descripcion">
           {evento.descripcion?.slice(0, 80)}...
@@ -25,7 +29,6 @@ const EventoCard = ({ evento }) => {
     </Link>
   );
 };
-
 
 export default EventoCard;
 

@@ -1,50 +1,89 @@
+/* Estilo general de la card */
 .evento-card {
   width: 260px;
   border-radius: 14px;
   overflow: hidden;
-  background: #fff;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  background: #f1e6c9;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   text-decoration: none;
   color: #333;
   display: block;
+  cursor: pointer;
+  margin: 10px; /* Añadí un margen alrededor de la card */
 }
 
+/* Efecto hover para mejorar la interacción */
 .evento-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 6px 12px rgba(0,0,0,0.25);
+  transform: translateY(-6px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
 }
 
+/* Imagen de la card */
 .evento-card-img {
   height: 150px;
   background-size: cover;
   background-position: center;
+  border-bottom: 2px solid #f1f1f1; /* Línea sutil entre la imagen y el contenido */
 }
 
+/* Contenedor del contenido */
 .evento-card-content {
-  padding: 14px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
+/* Título del evento */
 .evento-title {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   font-weight: bold;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
+  color: #624a2e;
+  transition: color 0.3s ease;
 }
 
+.evento-title:hover {
+  color: #e67e22; /* Color naranja al pasar el mouse */
+}
+
+/* Pueblo y provincia */
 .evento-pueblo {
   font-size: 0.95rem;
-  color: #666;
-  margin-bottom: 6px;
+  color: #B35A2C;
+;
+  margin-bottom: 8px;
 }
 
+/* Fecha del evento */
 .evento-fecha {
   font-size: 0.9rem;
-  color: #444;
-  margin-bottom: 6px;
+  color: #34495e;
+  margin-bottom: 8px;
 }
 
+/* Descripción del evento */
 .evento-descripcion {
   font-size: 0.9rem;
-  line-height: 1.3rem;
-  color: #555;
+  line-height: 1.4rem;
+  color: #2c3e50;
+  margin-bottom: 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Efecto hover para el texto de la descripción */
+.evento-descripcion:hover {
+  color: #2980b9; /* Color azul al pasar el mouse */
+  text-decoration: underline;
+}
+
+/* Ajustes para pantallas pequeñas */
+@media (max-width: 600px) {
+  .evento-card {
+    width: 100%;
+    margin: 10px 0; /* Se ajusta para pantallas más pequeñas */
+  }
 }
