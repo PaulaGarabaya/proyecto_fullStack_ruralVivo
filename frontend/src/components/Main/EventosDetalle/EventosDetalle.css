@@ -1,75 +1,389 @@
-.evento-details {
-  max-width: 900px;
+/* =================== CONTENEDOR PRINCIPAL =================== */
+.evento-details-container {
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 24px;
+  padding: 40px 20px;
 }
 
-.evento-img {
+.evento-details-content {
+  background:#f1e6c9;
+  border-radius: 12px;
+  padding: 40px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+
+/* =================== HEADER =================== */
+.evento-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 32px;
+  padding-bottom: 24px;
+  border-bottom: 2px solid #FAF3E0;
+  gap: 20px;
+}
+
+.evento-header h1 {
+  font-size: 2.5rem;
+  color: #8C6A43;
+  margin: 0;
+  flex: 1;
+  line-height: 1.2;
+}
+
+/* =================== LAYOUT DOS COLUMNAS =================== */
+.evento-main-layout {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: 40px;
+  margin-bottom: 40px;
+}
+
+/* Columna de información (izquierda) */
+.evento-info-column {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Columna de imagen (derecha) */
+.evento-image-column {
+  position: sticky;
+  top: 20px;
+  height: fit-content;
+}
+
+.evento-image-wrapper {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  background-color: #f5f5f5;
+}
+
+.evento-detail-img {
   width: 100%;
-  max-height: 300px;
+  height: auto;
+  max-height: 500px;
   object-fit: cover;
-  border-radius: 10px;
-  margin-bottom: 20px;
+  display: block;
 }
 
-.evento-info {
-  font-size: 1.1rem;
-  margin-bottom: 12px;
+/* =================== SECCIONES DE INFO =================== */
+.evento-section {
+  padding: 20px;
+  background-color: #FAF3E0;
+  border-radius: 8px;
+  border-left: 4px solid #8C6A43;
+}
+
+.evento-section h3 {
+  font-size: 1.2rem;
+  color: #8C6A43;
+  margin: 0 0 12px 0;
+}
+
+.evento-section p {
+  margin: 8px 0;
+  color: #8C6A43;
+  line-height: 1.6;
+}
+
+.evento-section p strong {
+  color: #333;
+  margin-right: 8px;
+}
+
+.descripcion-text {
+  white-space: pre-wrap;
+  line-height: 1.8;
   color: #333;
 }
 
-.evento-pueblo-info {
-  margin: 10px 0;
-  padding: 10px;
-  background: #f3f3f3;
-  border-radius: 8px;
+/* =================== BADGE DE TIPO =================== */
+.evento-tipo-badge {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #8C6A43;
+  color: #FAF3E0;
+  border-radius: 25px;
+  font-size: 1rem;
+  font-weight: 500;
+  align-self: flex-start;
 }
 
-.evento-map-container {
-  margin-top: 25px;
-}
-
-.eventos-loading {
-  display: flex;
-  justify-content: center; /* Centrado horizontal */
-  align-items: center;     /* Centrado vertical */
-  height: 200px;  
-}
-.evento-details-container {
-  display: flex;
-  flex-direction: row; /* fila: texto a la izquierda, imagen a la derecha */
-  gap: 20px;
-  align-items: flex-start;
-}
-.evento-text {
-  flex: 1; /* ocupa todo el espacio disponible */
-}
-
-.evento-img-container {
-  flex: 0 0 300px; /* ancho fijo de la imagen */
-}
-
-.evento-img-container img {
-  width: 100%;
-  height: auto;
-  border-radius: 8px;
-  object-fit: cover;
-}
-.evento-actions {
-  margin-top: 20px;
-  display: flex;
-  gap: 10px;
-}
-
-.evento-actions button {
-  padding: 8px 12px;
-  border: none;
+/* =================== BOTÓN PROGRAMA =================== */
+.btn-programa {
+  display: inline-block;
+  padding: 14px 28px;
   background-color: #8C6A43;
   color: white;
-  cursor: pointer;
-  border-radius: 4px;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: all 0.3s;
+  font-weight: 500;
+  text-align: center;
 }
 
-.evento-actions button:hover {
-  background-color: #6b4f33;
+.btn-programa:hover {
+  background-color: #6d5234;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(140, 106, 67, 0.3);
+}
+
+/* =================== MAPA =================== */
+.evento-mapa-section {
+  margin-top: 40px;
+  padding: 30px;
+  background-color: #FAF3E0;
+  border-radius: 12px;
+}
+
+.evento-mapa-section h3 {
+  font-size: 1.4rem;
+  color: #8C6A43;
+  margin: 0 0 20px 0;
+}
+
+.coordenadas-info {
+  margin-top: 16px;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #666;
+  font-style: italic;
+}
+
+.no-coordenadas {
+  text-align: center;
+  padding: 40px 20px;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  margin-top: 24px;
+}
+
+.no-coordenadas p {
+  color: #666;
+  margin: 8px 0;
+}
+
+/* =================== LOADING Y ERROR =================== */
+.eventos-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+}
+
+.evento-error {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 40px;
+  text-align: center;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.evento-error h2 {
+  color: #c62828;
+  margin-bottom: 16px;
+}
+
+.evento-error p {
+  color: #666;
+  margin-bottom: 24px;
+}
+
+.evento-error button {
+  padding: 12px 24px;
+  background-color: #8C6A43;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.2s;
+}
+
+.evento-error button:hover {
+  background-color: #6d5234;
+}
+
+/* =================== FORMULARIO DE EDICIÓN =================== */
+.evento-edit-form {
+  background-color: #f8f9fa;
+  padding: 30px;
+  border-radius: 12px;
+  border: 2px solid #8C6A43;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-family: inherit;
+  transition: border-color 0.2s;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #8C6A43;
+  box-shadow: 0 0 0 3px rgba(140, 106, 67, 0.1);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid #ddd;
+}
+
+.btn-save,
+.btn-cancel {
+  flex: 1;
+  padding: 14px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-save {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.btn-save:hover:not(:disabled) {
+  background-color: #45a049;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+}
+
+.btn-cancel {
+  background-color: #757575;
+  color: white;
+}
+
+.btn-cancel:hover:not(:disabled) {
+  background-color: #616161;
+}
+
+.btn-save:disabled,
+.btn-cancel:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Responsive para el formulario */
+@media (max-width: 768px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .evento-edit-form {
+    padding: 20px;
+  }
+}
+
+/* =================== RESPONSIVE =================== */
+@media (max-width: 1024px) {
+  .evento-main-layout {
+    grid-template-columns: 1fr 350px;
+    gap: 30px;
+  }
+
+  .evento-header h1 {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .evento-details-container {
+    padding: 20px 12px;
+  }
+
+  .evento-details-content {
+    padding: 24px;
+  }
+
+  /* En móvil, la imagen va arriba */
+  .evento-main-layout {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .evento-image-column {
+    order: -1; /* Imagen primero en móvil */
+    position: relative;
+    top: 0;
+  }
+
+  .evento-detail-img {
+    max-height: 300px;
+  }
+
+  .evento-header {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .evento-header h1 {
+    font-size: 1.75rem;
+  }
+
+  .evento-section {
+    padding: 16px;
+  }
+
+  .evento-mapa-section {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .evento-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .evento-tipo-badge {
+    font-size: 0.9rem;
+    padding: 8px 16px;
+  }
+
+  .btn-programa {
+    padding: 12px 20px;
+    font-size: 0.95rem;
+  }
 }

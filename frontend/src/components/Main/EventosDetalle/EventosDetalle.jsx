@@ -1,310 +1,402 @@
-import React, { useEffect, useState } from "react";
-import './EventosDetalle.css'
-import { useParams, useLocation } from "react-router-dom";
-import { getEvento } from "../../../services/eventosService"; // Servicio para obtener los datos del evento
-import { getPueblo } from "../../../services/pueblosService"; // Servicio para obtener los datos del pueblo
-import Map from "./Map"; // Importar el componente del mapa
-import { RotatingLines } from 'react-loader-spinner'
-import BotonBorrarEditar from "./BotonBorrarEditar"; // Importamos el componente de botones
-
+import React, { useEffect, useState, useContext } from "react";
+import './EventosDetalle.css';
+import { useParams, useNavigate } from "react-router-dom";
+import { getEvento, updateEvento } from "../../../services/eventosService";
+import { getPueblo } from "../../../services/pueblosService";
+import { getPueblos } from "../../../services/pueblosService";
+import { UserContext } from "../../../context/UserContext";
+import Map from "./Map";
+import { RotatingLines } from 'react-loader-spinner';
+import BotonBorrarEditar from "./BotonBorrarEditar";
+import BotonFavoritos from "./BotonFavoritos";
 
 const EventoDetails = () => {
-  const { id } = useParams(); // Obtener el id del evento desde la URL
-  const location = useLocation();
-  const [evento, setEvento] = useState(null);
-  const [pueblo, setPueblo] = useState(null); // Estado para guardar los datos del pueblo asociado
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const { user } = useContext(UserContext);
 
-  // Recuperar datos pasados por query params como fallback
-  const searchParams = new URLSearchParams(location.search);
-  const titulo = searchParams.get("titulo");
-  const tipo = searchParams.get("tipo");
-  const descripcion = searchParams.get("descripcion");
-  const fecha_inicio = searchParams.get("fecha_inicio");
-  const fecha_fin = searchParams.get("fecha_fin");
-  const url = searchParams.get("url");
-  const latitud = searchParams.get("latitud");
-  const longitud = searchParams.get("longitud");
+  const [evento, setEvento] = useState(null);
+  const [pueblo, setPueblo] = useState(null);
+  const [pueblos, setPueblos] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  
+  // 🔥 Estado para modo edición
+  const [isEditing, setIsEditing] = useState(false);
+  const [editFormData, setEditFormData] = useState({});
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    // Obtener evento
-    const fetchEvento = async () => {
+    const fetchData = async () => {
       try {
-        const data = await getEvento(id); // Llamada al servicio para obtener los detalles del evento
-        setEvento({
-          id: data.evento_id,
-          titulo: data.titulo,
-          tipo: data.tipo,
-          descripcion: data.descripcion,
-          fecha_inicio: data.fecha_inicio,
-          fecha_fin: data.fecha_fin,
-          url: data.url,
-          latitud: data.latitud, // Coordenadas del evento (si existen)
-          longitud: data.longitud, // Coordenadas del evento (si existen)
-          pueblo_id: data.pueblo_id, // ID del pueblo asociado
-        });
-        // Obtener pueblo si el evento tiene un pueblo asociado
+        setLoading(true);
+        
+        // Obtener evento
+        const data = await getEvento(id);
+        setEvento(data);
+
+        // Obtener pueblo si existe
         if (data.pueblo_id) {
           const puebloData = await getPueblo(data.pueblo_id);
-          setPueblo(puebloData); // Guardamos los datos del pueblo asociado
+          setPueblo(puebloData);
         }
+
+        // Obtener todos los pueblos para el select
+        const pueblosData = await getPueblos();
+        setPueblos(pueblosData);
+
       } catch (error) {
         console.error("Error al cargar evento:", error);
-        setEvento({
-          id,
-          titulo,
-          tipo,
-          descripcion,
-          fecha_inicio,
-          fecha_fin,
-          url,
-          latitud,
-          longitud,
-        });
+        setError("No se pudo cargar el evento");
+      } finally {
+        setLoading(false);
       }
     };
 
-    fetchEvento();
+    fetchData();
   }, [id]);
 
-  // Si no tenemos datos del evento o del pueblo, mostramos un mensaje
-  if (!evento) return <span className="eventos-loading"><RotatingLines
-              visible={true}
-              height="96"
-              width="96"
-              color="#8C6A43"
-              strokeWidth="5"
-              animationDuration="0.75"
-              ariaLabel="rotating-lines-loading"
-              wrapperStyle={{}}
-              wrapperClass=""
-              /></span>;
+  const canEditOrDelete = user && evento && (
+    evento.user_id === user.user_id || 
+    user.role === 'admin'
+  );
 
-  // Determinar las coordenadas a usar
-  const lat = evento.latitud || (pueblo && pueblo.latitud); // Si el evento no tiene coordenadas, usar las del pueblo
-  const lng = evento.longitud || (pueblo && pueblo.longitud); // Lo mismo para la longitud
+  const formatDate = (dateString) => {
+    if (!dateString) return "No especificada";
+    const date = new Date(dateString);
+    return date.toLocaleDateString('es-ES', { 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric' 
+    });
+  };
 
-  return (
-    <div className="evento-details">
-      <img className="evento-img" src={evento.pueblo_img} />
-      <h2 className="evento-info">{evento.titulo}</h2>
-      <p><strong>Tipo:</strong> {evento.tipo}</p>
-      <p><strong>Descripción:</strong> {evento.descripcion}</p>
-      <p><strong>Fecha de inicio:</strong> {evento.fecha_inicio}</p>
-      <p><strong>Fecha de fin:</strong> {evento.fecha_fin}</p>
-      {evento.url && (
-        <a href={evento.url} target="_blank" rel="noopener noreferrer">Ver Programa</a>
-      )}
+  const formatDateForInput = (dateString) => {
+    if (!dateString) return "";
+    return dateString.split("T")[0];
+  };
 
-      {/* Mostrar el nombre del pueblo y la provincia si están disponibles */}
-      {pueblo ? (
-        <>
-          <p className="evento-pueblo-info"><strong>Pueblo:</strong> {pueblo.nombre}</p>
-          <p className="evento-pueblo-info"><strong>Provincia:</strong> {pueblo.provincia}</p>
-        </>
-      ) : (
-        <p>No se pudo obtener información del pueblo.</p>
-      )}
+  // 🔥 Activar modo edición
+  const handleStartEdit = () => {
+    if (window.confirm("¿Quieres editar este evento?")) {
+      setEditFormData({
+        pueblo_id: evento.pueblo_id || "",
+        titulo: evento.titulo || "",
+        tipo: evento.tipo || "fiesta",
+        descripcion: evento.descripcion || "",
+        fecha_inicio: formatDateForInput(evento.fecha_inicio),
+        fecha_fin: formatDateForInput(evento.fecha_fin),
+        url: evento.url || ""
+      });
+      setIsEditing(true);
+    }
+  };
 
-      {/* Mostrar coordenadas si están disponibles */}
-      {lat && lng && (
-        <div>
-          <p><strong>Ubicación:</strong> Latitud: {lat}, Longitud: {lng}</p>
-          {/* Mostrar el mapa con las coordenadas */}
-          <Map lat={lat} lng={lng} name={evento.titulo} />
-        </div>
-      )}
+  // 🔥 Cancelar edición
+  const handleCancelEdit = () => {
+    setIsEditing(false);
+    setEditFormData({});
+  };
 
-      {/* Si no hay coordenadas disponibles */}
-      {(!lat || !lng) && <p>Coordenadas no disponibles</p>}
-      {/* Imagen a la derecha */}
-      <div className="evento-img-container">
-        <img
-          src={evento.img_url || evento.pueblo_img || '/default.jpg'}
-          alt={evento.titulo}
+  // 🔥 Cambios en el formulario
+  const handleInputChange = (e) => {
+    setEditFormData({
+      ...editFormData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  // 🔥 Guardar cambios
+  const handleSaveEdit = async (e) => {
+    e.preventDefault();
+    
+    if (!window.confirm("¿Guardar los cambios realizados?")) {
+      return;
+    }
+
+    try {
+      setSaving(true);
+      
+      const updatedEvento = await updateEvento(id, {
+        ...editFormData,
+        pueblo_id: Number(editFormData.pueblo_id)
+      });
+
+      // Actualizar estado local
+      setEvento(updatedEvento.evento || updatedEvento);
+      setIsEditing(false);
+      alert("✅ Evento actualizado correctamente");
+
+      // Recargar pueblo si cambió
+      if (editFormData.pueblo_id !== evento.pueblo_id) {
+        const puebloData = await getPueblo(editFormData.pueblo_id);
+        setPueblo(puebloData);
+      }
+
+    } catch (error) {
+      console.error('Error al actualizar:', error);
+      alert("❌ Error al actualizar: " + error.message);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="eventos-loading">
+        <RotatingLines
+          visible={true}
+          height="96"
+          width="96"
+          color="#8C6A43"
+          strokeWidth="5"
+          animationDuration="0.75"
+          ariaLabel="rotating-lines-loading"
         />
       </div>
-            {/* Usamos el componente EventActionButtons y le pasamos el id del evento */}
-      <BotonBorrarEditar eventoId={id} />
+    );
+  }
+
+  if (error || !evento) {
+    return (
+      <div className="evento-error">
+        <h2>Error</h2>
+        <p>{error || "No se encontró el evento"}</p>
+        <button onClick={() => navigate('/eventos')}>Volver a eventos</button>
+      </div>
+    );
+  }
+
+  const lat = parseFloat(evento.latitud || pueblo?.latitud);
+  const lng = parseFloat(evento.longitud || pueblo?.longitud);
+  const hasValidCoordinates = !isNaN(lat) && !isNaN(lng) && lat !== 0 && lng !== 0;
+
+  return (
+    <div className="evento-details-container">
+      <div className="evento-details-content">
+        
+        {/* Header con título y botones */}
+        <div className="evento-header">
+          {!isEditing ? (
+            <h1>{evento.titulo}</h1>
+          ) : (
+            <h1>✏️ Editando evento</h1>
+          )}
+            {/* Grupo de botones de acción */}
+            {/* Favoritos siempre visible si hay usuario */}
+          {user && <BotonFavoritos eventoId={evento.evento_id} />}
+          {canEditOrDelete && !isEditing && (
+            <BotonBorrarEditar 
+              evento={evento}
+              onEdit={handleStartEdit}
+              onDelete={() => navigate('/eventos')}
+            />
+          )}
+        </div>
+
+        {/* 🔥 MODO EDICIÓN */}
+        {isEditing ? (
+          <form onSubmit={handleSaveEdit} className="evento-edit-form">
+            
+            <div className="form-group">
+              <label htmlFor="pueblo_id">Pueblo *</label>
+              <select
+                id="pueblo_id"
+                name="pueblo_id"
+                value={editFormData.pueblo_id}
+                onChange={handleInputChange}
+                required
+              >
+                <option value="">Seleccione un pueblo</option>
+                {pueblos.map((p) => (
+                  <option key={p.pueblo_id} value={p.pueblo_id}>
+                    {p.nombre}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="titulo">Título *</label>
+              <input
+                type="text"
+                id="titulo"
+                name="titulo"
+                value={editFormData.titulo}
+                onChange={handleInputChange}
+                required
+                maxLength={200}
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="tipo">Tipo *</label>
+              <select
+                id="tipo"
+                name="tipo"
+                value={editFormData.tipo}
+                onChange={handleInputChange}
+                required
+              >
+                <option value="fiesta">🎉 Fiesta</option>
+                <option value="evento_cultural">🎭 Evento Cultural</option>
+                <option value="otro">📅 Otro</option>
+              </select>
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="descripcion">Descripción</label>
+              <textarea
+                id="descripcion"
+                name="descripcion"
+                value={editFormData.descripcion}
+                onChange={handleInputChange}
+                rows={5}
+              />
+            </div>
+
+            <div className="form-row">
+              <div className="form-group">
+                <label htmlFor="fecha_inicio">Fecha Inicio</label>
+                <input
+                  type="date"
+                  id="fecha_inicio"
+                  name="fecha_inicio"
+                  value={editFormData.fecha_inicio}
+                  onChange={handleInputChange}
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="fecha_fin">Fecha Fin</label>
+                <input
+                  type="date"
+                  id="fecha_fin"
+                  name="fecha_fin"
+                  value={editFormData.fecha_fin}
+                  onChange={handleInputChange}
+                />
+              </div>
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="url">URL / Enlace</label>
+              <input
+                type="url"
+                id="url"
+                name="url"
+                value={editFormData.url}
+                onChange={handleInputChange}
+                placeholder="https://ejemplo.com"
+              />
+            </div>
+
+            <div className="form-actions">
+              <button 
+                type="submit" 
+                className="btn-save"
+                disabled={saving}
+              >
+                {saving ? "💾 Guardando..." : "💾 Guardar Cambios"}
+              </button>
+              <button 
+                type="button" 
+                className="btn-cancel"
+                onClick={handleCancelEdit}
+                disabled={saving}
+              >
+                ❌ Cancelar
+              </button>
+            </div>
+
+          </form>
+        ) : (
+          /* 🔥 MODO VISTA */
+          <>
+            <div className="evento-main-layout">
+              
+              {/* Columna izquierda: Información */}
+              <div className="evento-info-column">
+                
+                <div className="evento-tipo-badge">
+                  {evento.tipo === 'fiesta' && '🎉 Fiesta'}
+                  {evento.tipo === 'evento_cultural' && '🎭 Evento Cultural'}
+                  {evento.tipo === 'otro' && '📅 Otro'}
+                </div>
+
+                <div className="evento-section">
+                  <h3>📅 Fechas</h3>
+                  <p><strong>Inicio:</strong> {formatDate(evento.fecha_inicio)}</p>
+                  {evento.fecha_fin && (
+                    <p><strong>Fin:</strong> {formatDate(evento.fecha_fin)}</p>
+                  )}
+                </div>
+
+                {pueblo && (
+                  <div className="evento-section">
+                    <h3>📍 Ubicación</h3>
+                    <p><strong>Pueblo:</strong> {pueblo.nombre}</p>
+                    <p><strong>Provincia:</strong> {pueblo.provincia}</p>
+                    {pueblo.ccaa && <p><strong>Comunidad:</strong> {pueblo.ccaa}</p>}
+                  </div>
+                )}
+
+                {evento.descripcion && (
+                  <div className="evento-section">
+                    <h3>ℹ️ Descripción</h3>
+                    <p className="descripcion-text">{evento.descripcion}</p>
+                  </div>
+                )}
+
+                {evento.url && (
+                  <div className="evento-section">
+                    <a 
+                      href={evento.url} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="btn-programa"
+                    >
+                      🔗 Ver Programa Completo
+                    </a>
+                  </div>
+                )}
+
+              </div>
+
+              {/* Columna derecha: Imagen */}
+              <div className="evento-image-column">
+                {(evento.url || pueblo?.img) && (
+                  <div className="evento-image-wrapper">
+                    <img 
+                      src={evento.url || pueblo?.img || '/default-event.jpg'} 
+                      alt={evento.titulo}
+                      className="evento-detail-img"
+                    />
+                  </div>
+                )}
+              </div>
+
+            </div>
+
+            {hasValidCoordinates ? (
+              <div className="evento-mapa-section">
+                <h3>🗺️ Ubicación en el Mapa</h3>
+                <Map lat={lat} lng={lng} name={evento.titulo} />
+                <p className="coordenadas-info">
+                  Coordenadas: {lat.toFixed(4)}, {lng.toFixed(4)}
+                </p>
+              </div>
+            ) : (
+              <div className="no-coordenadas">
+                <p>📍 Coordenadas no disponibles para este evento</p>
+              </div>
+            )}
+          </>
+        )}
+
+      </div>
     </div>
   );
 };
 
 export default EventoDetails;
-
-
-//////////////////////BORRAR Y EDITAR///////////////////////////////// No termina de hacerlo
-// import React, { useContext } from "react";
-// import { useNavigate } from "react-router-dom";
-// import { UserContext } from "../../../context/UserContext";
-// import { deleteEvento } from "../../../services/eventosService";
-// import Map from "./Map";
-
-// const EventoDetailsActions = ({ evento }) => {
-//   const { user } = useContext(UserContext);
-//   const navigate = useNavigate();
-
-//   const canEditOrDelete = evento.user_id === user.user_id || user.role === "admin";
-
-//   const handleDelete = async () => {
-//     if (window.confirm("¿Deseas eliminar este evento?")) {
-//       try {
-//         await deleteEvento(evento.evento_id);
-//         alert("Evento eliminado");
-//         navigate("/eventos"); // volver al listado
-//       } catch (err) {
-//         alert(err.message);
-//       }
-//     }
-//   };
-
-//   const handleEdit = () => {
-//     navigate(`/evento/${evento.evento_id}/edit`);
-//   };
-
-//   if (!canEditOrDelete) return null;
-
-//   return (
-//     <div className="evento-actions">
-//       <button onClick={handleEdit}>Editar</button>
-//       <button onClick={handleDelete}>Eliminar</button>
-//     </div>
-//   );
-// };
-
-// export default EventoDetailsActions;
-// import React, { useEffect, useState } from "react";
-// import './EventosDetalle.css';
-// import { useParams, useLocation, useNavigate } from "react-router-dom";
-// import { getEvento, deleteEvento } from "../../../services/eventosService"; 
-// import { getPueblo } from "../../../services/pueblosService"; 
-// import { RotatingLines } from 'react-loader-spinner';
-// import {UserProvider} from "../../../context/UserContext"; // Importa tu contexto de usuario
-
-// const EventoDetails = () => {
-//   const { id } = useParams();
-//   const location = useLocation();
-//   const navigate = useNavigate();
-//   const { user } = UserProvider(); // Obtener los datos del usuario desde el contexto
-//   const [evento, setEvento] = useState(null);
-//   const [pueblo, setPueblo] = useState(null);
-
-//   // Parámetros de búsqueda (fallback para valores)
-//   const searchParams = new URLSearchParams(location.search);
-//   const titulo = searchParams.get("titulo");
-//   const tipo = searchParams.get("tipo");
-//   const descripcion = searchParams.get("descripcion");
-//   const fecha_inicio = searchParams.get("fecha_inicio");
-//   const fecha_fin = searchParams.get("fecha_fin");
-//   const url = searchParams.get("url");
-//   const latitud = searchParams.get("latitud");
-//   const longitud = searchParams.get("longitud");
-
-//   useEffect(() => {
-//     const fetchEvento = async () => {
-//       try {
-//         const data = await getEvento(id);
-//         setEvento({
-//           id: data.evento_id,
-//           titulo: data.titulo,
-//           tipo: data.tipo,
-//           descripcion: data.descripcion,
-//           fecha_inicio: data.fecha_inicio,
-//           fecha_fin: data.fecha_fin,
-//           url: data.url,
-//           latitud: data.latitud,
-//           longitud: data.longitud,
-//           pueblo_id: data.pueblo_id,
-//         });
-//         if (data.pueblo_id) {
-//           const puebloData = await getPueblo(data.pueblo_id);
-//           setPueblo(puebloData);
-//         }
-//       } catch (error) {
-//         console.error("Error al cargar evento:", error);
-//         setEvento({
-//           id,
-//           titulo,
-//           tipo,
-//           descripcion,
-//           fecha_inicio,
-//           fecha_fin,
-//           url,
-//           latitud,
-//           longitud,
-//         });
-//       }
-//     };
-
-//     fetchEvento();
-//   }, [id]);
-
-//   if (!evento) return <span className="eventos-loading"><RotatingLines visible={true} height="96" width="96" color="#8C6A43" strokeWidth="5" animationDuration="0.75" ariaLabel="rotating-lines-loading" /></span>;
-
-//   // Comprobar si el usuario tiene permisos para editar o borrar
-//   const canEditOrDelete = evento.user_id === user?.user_id || user?.role === "admin";
-
-//   const handleDelete = async () => {
-//     if (window.confirm("¿Deseas eliminar este evento?")) {
-//       try {
-//         await deleteEvento(evento.evento_id);
-//         alert("Evento eliminado");
-//         navigate("/eventos");
-//       } catch (err) {
-//         alert(err.message);
-//       }
-//     }
-//   };
-
-//   const handleEdit = () => {
-//     navigate(`/evento/${evento.evento_id}/edit`);
-//   };
-
-//   const lat = evento.latitud || (pueblo && pueblo.latitud);
-//   const lng = evento.longitud || (pueblo && pueblo.longitud);
-
-//   return (
-//     <div className="evento-details">
-//       <img className="evento-img" src={evento.pueblo_img} />
-//       <h2 className="evento-info">{evento.titulo}</h2>
-//       <p><strong>Tipo:</strong> {evento.tipo}</p>
-//       <p><strong>Descripción:</strong> {evento.descripcion}</p>
-//       <p><strong>Fecha de inicio:</strong> {evento.fecha_inicio}</p>
-//       <p><strong>Fecha de fin:</strong> {evento.fecha_fin}</p>
-//       {evento.url && (
-//         <a href={evento.url} target="_blank" rel="noopener noreferrer">Ver Programa</a>
-//       )}
-
-//       {pueblo ? (
-//         <>
-//           <p className="evento-pueblo-info"><strong>Pueblo:</strong> {pueblo.nombre}</p>
-//           <p className="evento-pueblo-info"><strong>Provincia:</strong> {pueblo.provincia}</p>
-//         </>
-//       ) : (
-//         <p>No se pudo obtener información del pueblo.</p>
-//       )}
-
-//       {lat && lng && (
-//         <div>
-//           <p><strong>Ubicación:</strong> Latitud: {lat}, Longitud: {lng}</p>
-//           <Map lat={lat} lng={lng} name={evento.titulo} />
-//         </div>
-//       )}
-
-//       {(!lat || !lng) && <p>Coordenadas no disponibles</p>}
-
-//       {/* Mostrar los botones de Editar y Eliminar solo si el usuario tiene permisos */}
-//       {canEditOrDelete && (
-//         <div className="evento-actions">
-//           <button onClick={handleEdit}>Editar</button>
-//           <button onClick={handleDelete}>Eliminar</button>
-//         </div>
-//       )}
-
-//       <div className="evento-img-container">
-//         <img src={evento.img_url || evento.pueblo_img || '/default.jpg'} alt={evento.titulo} />
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default EventoDetails;

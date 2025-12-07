@@ -1,0 +1,93 @@
+/* Contenedor principal */
+.register-container {
+  max-width: 400px;
+  margin: 3rem auto;
+  padding: 2.5rem;
+  background: #f1e6c9;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+  font-family: Arial, sans-serif;
+}
+
+/* Título */
+.register-container h2 {
+  text-align: center;
+  margin-bottom: 1.8rem;
+  color: #8C6A43;
+  font-weight: bold;
+}
+
+/* Inputs */
+.register-container input {
+  width: 100%;
+  padding: 0.8rem;
+  margin-bottom: 1.2rem;
+  border: 1px solid #bbb;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: all 0.2s ease-in-out;
+}
+
+/* Efecto focus */
+.register-container input:focus {
+  border-color: #8C6A43;
+  box-shadow: 0 0 5px rgba(140, 106, 67, 0.4);
+  outline: none;
+}
+
+/* Botón */
+.register-container button {
+  width: 100%;
+  padding: 0.8rem;
+  background: #8C6A43;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s ease-in-out, transform 0.15s ease-in-out;
+}
+
+/* Hover */
+.register-container button:hover {
+  background: #A47C5C;
+  transform: translateY(-2px);
+}
+
+/* Mensajes */
+.register-container .error,
+.register-container .success {
+  padding: 0.9rem;
+  margin-bottom: 1.3rem;
+  border-radius: 6px;
+  font-weight: bold;
+  text-align: center;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.register-container .error {
+  background: #ffe1e1;
+  color: #c62828;
+  border: 1px solid #e6b3b3;
+}
+
+.register-container .success {
+  background: #e6ffe8;
+  color: #2e7d32;
+  border: 1px solid #b6dfb9;
+}
+
+/* Animación suave */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .register-container {
+    margin: 1rem;
+    padding: 2rem;
+  }
+}

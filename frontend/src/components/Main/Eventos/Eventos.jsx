@@ -1,125 +1,104 @@
-// import React, { useEffect, useState } from "react";
-// import Search from "./Search";
-// import EventosList from "./EventosList"; 
-// import { getEventos, getEventosByPueblo } from "../../../services/eventosService"; // Agregado getEventosByPueblo
-
-// const EventosContainer = () => {
-//   const [allEventos, setAllEventos] = useState([]); // Todos los eventos desde la API
-//   const [eventosList, setEventosList] = useState([]); // Lista de eventos
-//   const [loading, setLoading] = useState(true);
-
-//   // Cargar eventos iniciales
-//   useEffect(() => {
-//     const fetchInitial = async () => {
-//       try {
-//         setLoading(true);
-//         const data = await getEventos(); // Llamada al servicio de eventos
-//         setEventosList(data);
-//         setAllEventos(data); // Guardamos todos los eventos para búsquedas o filtrado
-//       } catch (error) {
-//         console.error("Error al cargar eventos:", error);
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-
-//     fetchInitial();
-//   }, []);
-
-//   // Función para manejar la búsqueda de eventos por pueblo
-//   const handleSearchByPueblo = async (puebloId) => {
-//     try {
-//       setLoading(true);
-//       const data = await getEventosByPueblo(puebloId); // Obtener eventos filtrados por pueblo
-//       setEventosList(data);
-//     } catch (error) {
-//       console.error("Error al filtrar eventos por pueblo:", error);
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   return (
-//     <div>
-//       <h1>Eventos</h1>
-//       <Search 
-//         eventosList={eventosList} 
-//         setEventosList={setEventosList} 
-//         allEventos={allEventos} 
-//         setAllEventos={setAllEventos} 
-//         handleSearchByPueblo={handleSearchByPueblo} // Pasamos la función de búsqueda por pueblo
-//       />
-//       {loading ? (
-//         <p>Cargando eventos...</p>
-//       ) : (
-//         <EventosList eventos={eventosList} />
-//       )}
-//     </div>
-//   );
-// };
-
-// export default EventosContainer;
-
-
 import React, { useState, useEffect } from 'react';
-import './Eventos.css'
-import { getEventos } from "../../../services/eventosService"; // Servcio para obtener eventos
-import { getPueblos } from "../../../services/pueblosService"; // Servcio para obtener pueblos
-import EventosList from './EventosList'; // Componente de la lista de eventos
-import Search from './Search'; // Filtro de búsqueda para el pueblo
-import { RotatingLines } from 'react-loader-spinner'
+import './Eventos.css';
+import { getEventos } from "../../../services/eventosService";
+import { getPueblos } from "../../../services/pueblosService";
+import EventosList from './EventosList';
+import Search from './Search';
+import { RotatingLines } from 'react-loader-spinner';
 
 const EventosContainer = () => {
   const [eventos, setEventos] = useState([]);
   const [pueblos, setPueblos] = useState([]);
-  const [selectedPueblo, setSelectedPueblo] = useState(null);
+  const [filtros, setFiltros] = useState({
+    puebloId: null,
+    provincia: null,
+    ccaa: null,
+    fechaInicio: null,
+    fechaFin: null
+  });
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Cargar pueblos y eventos inicialmente
+  // Cargar pueblos al montar el componente
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchPueblos = async () => {
       try {
-        // Obtener todos los pueblos
         const pueblosData = await getPueblos();
         setPueblos(pueblosData);
+      } catch (error) {
+        console.error('Error al cargar pueblos:', error);
+        setError('Error al cargar los pueblos');
+      }
+    };
 
-        // Obtener los eventos filtrados por pueblo si existe alguno seleccionado
-        const eventosData = await getEventos(selectedPueblo);
+    fetchPueblos();
+  }, []);
+
+  // Cargar eventos cuando cambien los filtros
+  useEffect(() => {
+    const fetchEventos = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const eventosData = await getEventos(filtros);
         setEventos(eventosData);
       } catch (error) {
-        console.error('Error al cargar pueblos y eventos:', error);
+        console.error('Error al cargar eventos:', error);
+        setError('Error al cargar los eventos');
       } finally {
         setLoading(false);
       }
     };
 
-    fetchData();
-  }, [selectedPueblo]); // Vuelve a cargar cuando se cambia el pueblo seleccionado
+    fetchEventos();
+  }, [filtros]);
 
-  // Manejar la selección de un pueblo para filtrar los eventos
-  const handlePuebloChange = (puebloId) => {
-    setSelectedPueblo(puebloId);
+  // Actualizar filtros
+  const handleFiltrosChange = (nuevosFiltros) => {
+    setFiltros(prev => ({ ...prev, ...nuevosFiltros }));
+  };
+
+  // Función para recargar eventos (útil después de eliminar)
+  const reloadEventos = async () => {
+    try {
+      setLoading(true);
+      const eventosData = await getEventos(filtros);
+      setEventos(eventosData);
+    } catch (error) {
+      console.error('Error al recargar eventos:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="eventos-container">
       <h1 className="eventos-title">Eventos</h1>
-      <Search pueblos={pueblos} onPuebloChange={handlePuebloChange} />
+      
+      <Search 
+        pueblos={pueblos} 
+        onFiltrosChange={handleFiltrosChange}
+        filtros={filtros}
+      />
+
+      {error && <div className="error-message">{error}</div>}
 
       {loading ? (
-        <span className="eventos-loading"><span className="loading-text"><RotatingLines
-              visible={true}
-              height="96"
-              width="96"
-              color="#8C6A43"
-              strokeWidth="5"
-              animationDuration="0.75"
-              ariaLabel="rotating-lines-loading"
-              wrapperStyle={{}}
-              wrapperClass=""
-              /></span></span>
+        <div className="eventos-loading">
+          <RotatingLines
+            visible={true}
+            height="96"
+            width="96"
+            color="#8C6A43"
+            strokeWidth="5"
+            animationDuration="0.75"
+            ariaLabel="rotating-lines-loading"
+          />
+        </div>
+      ) : eventos.length === 0 ? (
+        <p className="no-eventos">No hay eventos disponibles</p>
       ) : (
-        <EventosList eventos={eventos} />
+        <EventosList eventos={eventos} onEventoDeleted={reloadEventos} />
       )}
     </div>
   );
