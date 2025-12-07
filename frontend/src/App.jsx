@@ -13,6 +13,7 @@ import Login from './components/Main/Login';
 import CrearEventos from './components/Main/CreateEvent';
 import Favoritos from './components/Main/Favoritos';
 // import Home from './components/Main/Home';
+import Profile from './components/Main/Profile';
 
 
 function App() {
@@ -54,6 +55,8 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/crear-eventos" element={<CrearEventos />} />
         <Route path="/favoritos" element={<Favoritos />} />
+        <Route path="/profile" element={<Profile />} />
+
         {/* <Route path="/" element={<Home />} /> */}
       </Routes>
 

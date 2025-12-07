@@ -1,0 +1,55 @@
+.btn-favorito {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 1.5rem;
+  border-radius: 50%;
+}
+
+.btn-favorito:hover:not(:disabled) {
+  background-color: rgba(255, 107, 107, 0.1);
+  transform: scale(1.15);
+}
+
+.btn-favorito.is-favorite {
+  animation: heartBeat 0.3s ease-in-out;
+}
+
+.btn-favorito:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-favorito:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+/* Versión pequeña */
+.btn-favorito-small {
+  width: 36px;
+  height: 36px;
+  font-size: 1.2rem;
+}
+
+/* Animación cuando se marca como favorito */
+@keyframes heartBeat {
+  0%, 100% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(1.3);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  75% {
+    transform: scale(1.25);
+  }
+}

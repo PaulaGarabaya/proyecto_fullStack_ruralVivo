@@ -112,6 +112,8 @@
 import React, { useState, useContext } from "react";
 import { signupUser } from "../../../services/userService";
 import { UserContext } from "../../../context/UserContext";
+import "./Singup.css";
+
 
 const Signup = () => {
   const { setUser } = useContext(UserContext);

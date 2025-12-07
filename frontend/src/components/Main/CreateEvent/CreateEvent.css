@@ -1,0 +1,102 @@
+/* Contenedor principal */
+.create-evento-container {
+  max-width: 500px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #f1e6c9;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  font-family: Arial, sans-serif;
+}
+
+/* Título del formulario */
+.create-evento-container h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #8C6A43;
+}
+
+/* Mensajes */
+.create-evento-container p {
+  margin-bottom: 1rem;
+  font-weight: bold;
+}
+
+.create-evento-container p.success {
+  color: #28a745;
+}
+
+.create-evento-container p.error {
+  color: #dc3545;
+}
+
+/* Labels */
+.create-evento-container label {
+  display: block;
+  margin-bottom: 0.3rem;
+  font-weight: bold;
+  color: #987e60;
+}
+
+/* Inputs y select */
+.create-evento-container input[type="text"],
+.create-evento-container input[type="date"],
+.create-evento-container select,
+.create-evento-container textarea {
+  width: 100%;
+  padding: 0.6rem 0.8rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+/* Focus */
+.create-evento-container input:focus,
+.create-evento-container select:focus,
+.create-evento-container textarea:focus {
+  outline: none;
+  border-color: #8C6A43;
+  box-shadow: 0 0 5px rgba(140, 106, 67, 0.5);
+}
+
+/* Textarea específico */
+.create-evento-container textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+/* Botón */
+.create-evento-container button {
+  width: 100%;
+  padding: 0.7rem;
+  background-color: #8C6A43;
+  color: white;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+/* Botón hover */
+.create-evento-container button:hover:not(:disabled) {
+  background-color: #a47c5c;
+  transform: translateY(-2px);
+}
+
+/* Botón deshabilitado */
+.create-evento-container button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .create-evento-container {
+    padding: 1.5rem;
+    margin: 1rem;
+  }
+}

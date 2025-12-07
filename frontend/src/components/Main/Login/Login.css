@@ -1,0 +1,98 @@
+/* Contenedor del login */
+.login-container {
+  max-width: 400px;
+  margin: 3rem auto;
+  padding: 2.5rem;
+  background: #f1e6c9;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+  font-family: Arial, sans-serif;
+}
+
+/* Título */
+.login-container h2 {
+  text-align: center;
+  margin-bottom: 1.8rem;
+  color: #8C6A43;
+  font-weight: bold;
+}
+
+/* Inputs */
+.login-container input {
+  width: 100%;
+  padding: 0.8rem;
+  margin-bottom: 1.2rem;
+  font-size: 1rem;
+  border: 1px solid #bbb;
+  border-radius: 6px;
+  transition: all 0.2s ease-in-out;
+}
+
+/* Efecto focus */
+.login-container input:focus {
+  border-color: #8C6A43;
+  box-shadow: 0 0 5px rgba(140, 106, 67, 0.4);
+  outline: none;
+}
+
+/* Botón */
+.login-container button {
+  width: 100%;
+  padding: 0.8rem;
+  font-size: 1.1rem;
+  background: #8C6A43;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.2s ease-in-out, transform 0.15s ease-in-out;
+}
+
+/* Hover */
+.login-container button:hover:not(:disabled) {
+  background: #A47C5C;
+  transform: translateY(-2px);
+}
+
+/* Disabled */
+.login-container button:disabled {
+  background: #c0c0c0;
+  cursor: not-allowed;
+}
+
+/* Mensajes */
+.error, .success {
+  text-align: center;
+  padding: 0.8rem;
+  border-radius: 6px;
+  margin-bottom: 1.2rem;
+  font-weight: bold;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.error {
+  background: #ffe1e1;
+  color: #c62828;
+  border: 1px solid #e6b3b3;
+}
+
+.success {
+  background: #e6ffe8;
+  color: #2e7d32;
+  border: 1px solid #b6dfb9;
+}
+
+/* Animación */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .login-container {
+    margin: 1rem;
+    padding: 2rem;
+  }
+}

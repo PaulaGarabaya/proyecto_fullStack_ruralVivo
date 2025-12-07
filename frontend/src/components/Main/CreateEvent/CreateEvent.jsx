@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { createEvento } from "../../../services/eventosService";
 import { getPueblos } from "../../../services/pueblosService";
+import './CreateEvent.css'
 
 const CreateEvento = () => {
   const [pueblos, setPueblos] = useState([]);
@@ -67,11 +68,11 @@ const CreateEvento = () => {
   };
 
   return (
-    <div style={{ maxWidth: "500px", margin: "auto" }}>
+    <div className="create-evento-container">
       <h2>Crear Evento</h2>
 
-      {mensaje && <p style={{ color: "green" }}>{mensaje}</p>}
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      {mensaje && <p className="success">{mensaje}</p>}
+      {error && <p className="error">{error}</p>}
 
       <form onSubmit={handleSubmit}>
 

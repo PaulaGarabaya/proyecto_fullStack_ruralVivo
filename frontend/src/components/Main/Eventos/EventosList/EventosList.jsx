@@ -1,11 +1,12 @@
 // import React from "react";
-// import EventoCard from "./EventosCard"; // Asegúrate de crear este componente de tarjeta de evento
+// import './EventosList.css'
+// import EventoCard from "./EventosCard"; // Card para cada evento
 
 // const EventosList = ({ eventos }) => {
 //   return (
-//     <div style={{ display: "flex", flexWrap: "wrap", gap: "16px" }}>
+//     <div className="eventos-list">
 //       {eventos.map((evento) => (
-//         <EventoCard key={evento.evento_id} evento={evento} />
+//         <EventoCard key={evento.evento_id} evento={evento} pueblo={evento.pueblo} />
 //       ))}
 //     </div>
 //   );
@@ -13,15 +14,20 @@
 
 // export default EventosList;
 
-import React from "react";
-import './EventosList.css'
-import EventoCard from "./EventosCard"; // Card para cada evento
 
-const EventosList = ({ eventos }) => {
+import React from "react";
+import './EventosList.css';
+import EventoCard from "./EventosCard";
+
+const EventosList = ({ eventos, onEventoDeleted }) => {
   return (
     <div className="eventos-list">
       {eventos.map((evento) => (
-        <EventoCard key={evento.evento_id} evento={evento} pueblo={evento.pueblo} />
+        <EventoCard 
+          key={evento.evento_id} 
+          evento={evento}
+          onDelete={onEventoDeleted}
+        />
       ))}
     </div>
   );

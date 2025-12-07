@@ -1,6 +1,23 @@
-// Función para obtener todos los eventos
-// export const getEventos = async () => {
-//   const response = await fetch('http://localhost:3000/api/eventos');
+// // Función para obtener todos los eventos
+// // export const getEventos = async () => {
+// //   const response = await fetch('http://localhost:3000/api/eventos');
+
+// //   if (!response.ok) {
+// //     const errorData = await response.json();
+// //     throw new Error(errorData.message || 'Error al obtener los eventos');
+// //   }
+
+// //   return await response.json();
+// // };
+
+// // // Obtener eventos (opcionalmente filtrados por pueblo)
+// export const getEventos = async (puebloId = null) => {
+//   let url = 'http://localhost:3000/api/eventos';
+//   if (puebloId) {
+//     url = `http://localhost:3000/api/eventos?pueblo_id=${puebloId}`; // Filtro por pueblo
+//   }
+
+//   const response = await fetch(url);
 
 //   if (!response.ok) {
 //     const errorData = await response.json();
@@ -10,14 +27,104 @@
 //   return await response.json();
 // };
 
-// // Obtener eventos (opcionalmente filtrados por pueblo)
-export const getEventos = async (puebloId = null) => {
-  let url = 'http://localhost:3000/api/eventos';
-  if (puebloId) {
-    url = `http://localhost:3000/api/eventos?pueblo_id=${puebloId}`; // Filtro por pueblo
-  }
+// // Función para obtener un evento por su ID
+// export const getEvento = async (id) => {
+//   const response = await fetch(`http://localhost:3000/api/eventos/${id}`);
 
-  const response = await fetch(url);
+//   if (!response.ok) {
+//     const errorData = await response.json();
+//     throw new Error(errorData.message || 'Error al obtener el evento');
+//   }
+
+//   return await response.json();
+// };
+
+// // Función para obtener los eventos de un pueblo específico (opcional)
+// export const getEventosByPueblo = async (puebloId) => {
+//   const response = await fetch(`http://localhost:3000/api/eventos?pueblo_id=${puebloId}`);
+
+//   if (!response.ok) {
+//     const errorData = await response.json();
+//     throw new Error(errorData.message || 'Error al obtener los eventos del pueblo');
+//   }
+
+//   return await response.json();
+// };
+// // Crear un nuevo evento
+// export const createEvento = async (eventoData) => {
+//   const response = await fetch('http://localhost:3000/api/eventos', {
+//     method: 'POST',
+//     headers: {
+//       'Content-Type': 'application/json'
+//     },
+//     credentials: "include",
+//     body: JSON.stringify(eventoData)
+//   });
+
+//   if (!response.ok) {
+//     const errorData = await response.json();
+//     throw new Error(errorData.message || 'Error al crear el evento');
+//   }
+
+//   return await response.json();
+// };
+
+// // Editar un evento existente
+// export const updateEvento = async (id, eventoData) => {
+//   const response = await fetch(`http://localhost:3000/api/eventos/${id}`, {
+//     method: 'PUT',
+//     headers: {
+//       'Content-Type': 'application/json'
+//     },
+//     credentials: "include",
+//     body: JSON.stringify(eventoData)
+//   });
+
+//   if (!response.ok) {
+//     const errorData = await response.json();
+//     throw new Error(errorData.message || 'Error al actualizar el evento');
+//   }
+
+//   return await response.json();
+// };
+
+// // Eliminar un evento
+// export const deleteEvento = async (id, eventoData) => {
+//   const response = await fetch(`http://localhost:3000/api/eventos/${id}`, {
+//     method: 'DELETE',
+//     headers: {
+//       'Content-Type': 'application/json'
+//     },
+//     credentials: "include",
+//     body: JSON.stringify(eventoData)
+//   });
+
+//   if (!response.ok) {
+//     const errorData = await response.json();
+//     throw new Error(errorData.message || 'Error al eliminar el evento');
+//   }
+
+//   return await response.json();
+// };
+
+const API_URL = 'http://localhost:3000/api';
+
+// =================== GET EVENTOS (con filtros opcionales) ===================
+export const getEventos = async (filtros = {}) => {
+  const { puebloId, provincia, ccaa, fechaInicio, fechaFin } = filtros;
+  
+  const params = new URLSearchParams();
+  if (puebloId) params.append('pueblo_id', puebloId);
+  if (provincia) params.append('provincia', provincia);
+  if (ccaa) params.append('ccaa', ccaa);
+  if (fechaInicio) params.append('fecha_inicio', fechaInicio);
+  if (fechaFin) params.append('fecha_fin', fechaFin);
+
+  const url = `${API_URL}/eventos${params.toString() ? '?' + params.toString() : ''}`;
+  
+  const response = await fetch(url, {
+    credentials: 'include'
+  });
 
   if (!response.ok) {
     const errorData = await response.json();
@@ -27,9 +134,11 @@ export const getEventos = async (puebloId = null) => {
   return await response.json();
 };
 
-// Función para obtener un evento por su ID
+// =================== GET EVENTO POR ID ===================
 export const getEvento = async (id) => {
-  const response = await fetch(`http://localhost:3000/api/eventos/${id}`);
+  const response = await fetch(`${API_URL}/eventos/${id}`, {
+    credentials: 'include'
+  });
 
   if (!response.ok) {
     const errorData = await response.json();
@@ -39,9 +148,11 @@ export const getEvento = async (id) => {
   return await response.json();
 };
 
-// Función para obtener los eventos de un pueblo específico (opcional)
+// =================== GET EVENTOS POR PUEBLO ===================
 export const getEventosByPueblo = async (puebloId) => {
-  const response = await fetch(`http://localhost:3000/api/eventos?pueblo_id=${puebloId}`);
+  const response = await fetch(`${API_URL}/pueblos/${puebloId}/eventos`, {
+    credentials: 'include'
+  });
 
   if (!response.ok) {
     const errorData = await response.json();
@@ -50,14 +161,15 @@ export const getEventosByPueblo = async (puebloId) => {
 
   return await response.json();
 };
-// Crear un nuevo evento
+
+// =================== CREATE EVENTO (requiere auth) ===================
 export const createEvento = async (eventoData) => {
-  const response = await fetch('http://localhost:3000/api/eventos', {
+  const response = await fetch(`${API_URL}/eventos`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
-    credentials: "include",
+    credentials: 'include', // 🔥 Para enviar cookie con token
     body: JSON.stringify(eventoData)
   });
 
@@ -69,14 +181,14 @@ export const createEvento = async (eventoData) => {
   return await response.json();
 };
 
-// Editar un evento existente
+// =================== UPDATE EVENTO (requiere auth + ownership) ===================
 export const updateEvento = async (id, eventoData) => {
-  const response = await fetch(`http://localhost:3000/api/eventos/${id}`, {
+  const response = await fetch(`${API_URL}/eventos/${id}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json'
     },
-    credentials: "include",
+    credentials: 'include',
     body: JSON.stringify(eventoData)
   });
 
@@ -88,15 +200,12 @@ export const updateEvento = async (id, eventoData) => {
   return await response.json();
 };
 
-// Eliminar un evento
-export const deleteEvento = async (id, eventoData) => {
-  const response = await fetch(`http://localhost:3000/api/eventos/${id}`, {
+// =================== DELETE EVENTO (requiere auth + ownership) ===================
+export const deleteEvento = async (id) => {
+  // 🔥 DELETE no debe llevar body
+  const response = await fetch(`${API_URL}/eventos/${id}`, {
     method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    credentials: "include",
-    body: JSON.stringify(eventoData)
+    credentials: 'include' // Solo cookie, sin body
   });
 
   if (!response.ok) {
