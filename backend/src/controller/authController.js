@@ -3,11 +3,39 @@ const { createToken } = require('../config/jwt');
 const bcrypt = require('bcryptjs');
 
 // =================== SIGNUP ===================
+// const signup = async (req, res) => {
+//     try {
+//         const { nombre, email, password, role } = req.body;
+
+//         // Validación básica
+//         if (!nombre || !email || !password) {
+//             return res.status(400).json({ msg: "Faltan datos obligatorios" });
+//         }
+
+//         // Hash de la contraseña
+//         const hashedPassword = await bcrypt.hash(password, 10);
+
+//         // Guardar usuario en la base de datos
+//         const newUser = await usersModels.signup(nombre, email, hashedPassword, role);
+
+//         res.status(201).json({ 
+//             msg: "Usuario registrado correctamente",
+//             user: {
+//                 nombre: newUser.nombre,
+//                 email: newUser.email
+//             }
+//         });
+
+//     } catch (error) {
+//         console.error('Error en signup:', error);
+//         res.status(400).json({ msg: error.message });
+//     }
+// };
+// =================== SIGNUP (con auto-login) ===================
 const signup = async (req, res) => {
     try {
         const { nombre, email, password, role } = req.body;
 
-        // Validación básica
         if (!nombre || !email || !password) {
             return res.status(400).json({ msg: "Faltan datos obligatorios" });
         }
@@ -18,14 +46,36 @@ const signup = async (req, res) => {
         // Guardar usuario en la base de datos
         const newUser = await usersModels.signup(nombre, email, hashedPassword, role);
 
-        res.status(201).json({ msg: "Usuario registrado correctamente" });
+        // 🔥 CREAR TOKEN AUTOMÁTICAMENTE tras registro
+        const token = createToken({ 
+            user_id: newUser.user_id, 
+            email: newUser.email, 
+            role: newUser.role || 'user'
+        });
+
+        // 🔥 DEVOLVER TOKEN EN COOKIE (auto-login)
+        res.status(201)
+            .cookie('token', token, { 
+                httpOnly: true,
+                secure: process.env.NODE_ENV === 'production',
+                sameSite: 'lax',
+                maxAge: 3600000 // 1 hora
+            })
+            .json({ 
+                msg: "Usuario registrado correctamente",
+                user: {
+                    user_id: newUser.user_id,
+                    nombre: newUser.nombre,
+                    email: newUser.email,
+                    role: newUser.role || 'user'
+                }
+            });
 
     } catch (error) {
-        // Manejo de error, como email duplicado
+        console.error('Error en signup:', error);
         res.status(400).json({ msg: error.message });
     }
 };
-
 // =================== LOGIN ===================
 const login = async (req, res) => {
     try {
@@ -53,13 +103,25 @@ const login = async (req, res) => {
             role: user[0].role 
         });
 
-        // Devolver token en cookie y header
+        // 🔥 COOKIE CON NOMBRE 'token' (consistente con middleware)
         res.status(200)
-            .set('Authorization', `Bearer ${token}`)
-            .cookie('access_token', token, { httpOnly: true, secure: true }) // httpOnly + secure para producción
-            .json({ role: user[0].role });
+            .cookie('token', token, { 
+                httpOnly: true,  // 🔒 Más seguro
+                secure: process.env.NODE_ENV === 'production', // Solo HTTPS en producción
+                sameSite: 'lax', // Protección CSRF
+                maxAge: 3600000 // 1 hora
+            })
+            .json({ 
+                msg: "Login exitoso",
+                user: {
+                    user_id: user[0].user_id,
+                    email: user[0].email,
+                    role: user[0].role
+                }
+            });
 
     } catch (error) {
+        console.error('Error en login:', error);
         res.status(400).json({ msg: error.message });
     }
 };
@@ -67,11 +129,16 @@ const login = async (req, res) => {
 // =================== LOGOUT ===================
 const logout = async (req, res) => {
     try {
+        // 🔥 Limpiar cookie 'token'
         res.status(200)
-            .set('Authorization', "")
-            .cookie('access_token', "", { httpOnly: true, secure: true })
-            .send();
+            .clearCookie('token', {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === 'production',
+                sameSite: 'lax'
+            })
+            .json({ msg: "Logout exitoso" });
     } catch (error) {
+        console.error('Error en logout:', error);
         res.status(400).json({ msg: error.message });
     }
 };
@@ -97,11 +164,9 @@ const getAllUsers = async (req, res) => {
 };
 
 // =================== EXPORT ===================
-const users = {
+module.exports = {
     signup,
     login,
     logout,
     getAllUsers
 };
-
-module.exports = users;

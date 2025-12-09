@@ -1,12 +1,13 @@
 const pool = require('../config/db_sql');
 
 const isOwner = async (req, res, next) => {
-    const eventId = req.params.id;
+    const eventoId = req.params.id; // 🔥 Usar evento_id
     const userId = req.user.user_id;
 
     try {
-        const query = `SELECT * FROM Eventos WHERE id = $1`;
-        const result = await pool.query(query, [eventId]);
+        // 🔥 Columna correcta: evento_id (no 'id')
+        const query = `SELECT * FROM Eventos WHERE evento_id = $1`;
+        const result = await pool.query(query, [eventoId]);
 
         if (result.rows.length === 0) {
             return res.status(404).json({ msg: "Evento no encontrado" });
@@ -14,13 +15,17 @@ const isOwner = async (req, res, next) => {
 
         const evento = result.rows[0];
 
-        if (evento.creator_id !== userId) {
+        // 🔥 Columna correcta: user_id (no 'creator_id')
+        if (evento.user_id !== userId) {
             return res.status(403).json({ msg: "No tienes permisos para modificar este evento" });
         }
 
+        // Opcional: pasar el evento al siguiente middleware/controller
+        req.evento = evento;
         next();
     } catch (error) {
-        res.status(500).json({ msg: error.message });
+        console.error('Error en isOwner:', error);
+        res.status(500).json({ msg: "Error al verificar permisos" });
     }
 };
 
