@@ -1,30 +1,3 @@
-// import React from "react";
-// import './Search.css';
-
-// const Search = ({ pueblos, onPuebloChange }) => {
-
-//   const handleSelectChange = (e) => {
-//     const selectedId = e.target.value === "all" ? null : parseInt(e.target.value);
-//     onPuebloChange(selectedId);
-//   };
-
-//   return (
-//     <div className="select-pueblo-container">
-//       <select className="search-select" onChange={handleSelectChange}>
-//         <option value="all">Todos los pueblos</option>
-//         {pueblos.map(pueblo => (
-//           <option key={pueblo.pueblo_id} value={pueblo.pueblo_id}>
-//             {pueblo.nombre}
-//           </option>
-//         ))}
-//       </select>
-//     </div>
-//   );
-// };
-
-// export default Search;
-
-
 import React, { useState } from "react";
 import './Search.css';
 
@@ -61,14 +34,14 @@ const Search = ({ pueblos, onFiltrosChange, filtros }) => {
       <div className="search-filters">
         {/* Filtro por pueblo */}
         <div className="filter-group">
-          <label htmlFor="pueblo">Pueblo:</label>
+          <label htmlFor="pueblo"></label>
           <select
             id="pueblo"
             className="search-select"
             value={localFiltros.puebloId || ''}
             onChange={(e) => handleChange('puebloId', e.target.value)}
           >
-            <option value="">Todos los pueblos</option>
+            <option value="">Selecciona un pueblo</option>
             {pueblos.map(pueblo => (
               <option key={pueblo.pueblo_id} value={pueblo.pueblo_id}>
                 {pueblo.nombre}
@@ -79,12 +52,12 @@ const Search = ({ pueblos, onFiltrosChange, filtros }) => {
 
         {/* Filtro por provincia */}
         <div className="filter-group">
-          <label htmlFor="provincia">Provincia:</label>
+          <label htmlFor="provincia"></label>
           <input
             id="provincia"
             type="text"
             className="search-input"
-            placeholder="Ej: Valladolid"
+            placeholder="Escribe la provincia"
             value={localFiltros.provincia || ''}
             onChange={(e) => handleChange('provincia', e.target.value)}
           />

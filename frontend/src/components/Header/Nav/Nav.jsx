@@ -37,7 +37,7 @@ const Nav = () => {
           <>
             <Link to="/crear-eventos" onClick={() => setIsOpen(false)}>Crear eventos</Link>
             <Link to="/favoritos" onClick={() => setIsOpen(false)}>Favoritos</Link>
-            <Link to="/profile" onClick={() => setIsOpen(false)}>Perfil</Link>
+            {/* <Link to="/profile" onClick={() => setIsOpen(false)}>Perfil</Link> */}
             <button className="logout-btn" onClick={handleLogout}>Cerrar sesión</button>
           </>
         ) : (

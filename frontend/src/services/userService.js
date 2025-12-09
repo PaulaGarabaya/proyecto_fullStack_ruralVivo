@@ -180,3 +180,52 @@ export const getAllUsers = async () => {
 export const loginWithGoogle = () => {
   window.location.href = `${API_URL}/auth/google`;
 };
+
+// Obtener datos del perfil
+export const getProfile = async () => {
+  const response = await fetch(`${API_URL}/profile`, {
+    method: 'GET',
+    credentials: 'include',
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Error al obtener el perfil');
+  }
+
+  return await response.json();
+};
+
+// Actualizar perfil
+export const updateProfile = async (profileData) => {
+  const response = await fetch(`${API_URL}/profile`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    credentials: 'include',
+    body: JSON.stringify(profileData),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Error al actualizar el perfil');
+  }
+
+  return await response.json();
+};
+
+// Obtener estadísticas del usuario
+export const getProfileStats = async () => {
+  const response = await fetch(`${API_URL}/profile/stats`, {
+    method: 'GET',
+    credentials: 'include',
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Error al obtener estadísticas');
+  }
+
+  return await response.json();
+};
