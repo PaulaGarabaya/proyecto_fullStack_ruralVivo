@@ -14,7 +14,7 @@ const handleResponse = async (response) => {
 
 // Registrar un nuevo usuario (público)
 export const signupUser = async (nombre, email, password, role = 'user') => {
-  const response = await fetch(`${API_URL}/singup`, {
+  const response = await fetch(`${API_URL}/signup`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

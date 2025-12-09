@@ -1,6 +1,19 @@
-// Obtener todos los pueblos (público)
-export const getPueblos = async () => {
-  const response = await fetch('http://localhost:3000/api/pueblos');
+const API_URL = 'http://localhost:3000/api';
+
+// Obtener todos los pueblos con filtros opcionales
+export const getPueblos = async (filtros = {}) => {
+  const { search, provincia, ccaa } = filtros;
+  
+  const params = new URLSearchParams();
+  if (search) params.append('search', search);
+  if (provincia) params.append('provincia', provincia);
+  if (ccaa) params.append('ccaa', ccaa);
+
+  const url = `${API_URL}/pueblos${params.toString() ? '?' + params.toString() : ''}`;
+  
+  const response = await fetch(url, {
+    credentials: 'include'
+  });
 
   if (!response.ok) {
     const errorData = await response.json();
@@ -10,9 +23,11 @@ export const getPueblos = async () => {
   return await response.json();
 };
 
-// Obtener un pueblo por ID (público)
+// Obtener un pueblo por ID
 export const getPueblo = async (id) => {
-  const response = await fetch(`http://localhost:3000/api/pueblos/${id}`);
+  const response = await fetch(`${API_URL}/pueblos/${id}`, {
+    credentials: 'include'
+  });
 
   if (!response.ok) {
     const errorData = await response.json();
