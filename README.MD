@@ -18,9 +18,7 @@ Una aplicación web full-stack para descubrir, crear y gestionar eventos en pueb
 - [API Endpoints](#-api-endpoints)
 - [Uso](#-uso)
 - [Capturas de Pantalla](#-capturas-de-pantalla)
-- [Contribución](#-contribución)
 - [Autor](#-autor)
-- [Licencia](#-licencia)
 
 ## ✨ Características
 
@@ -180,48 +178,74 @@ El esquema de la base de datos incluye las siguientes tablas:
 
 ## 📁 Estructura del Proyecto
 ```
-eventos-pueblos/
-├── client/                          # Frontend React
+ruralvivo/
+├── frontend/                          # Frontend React
 │   ├── src/
 │   │   ├── components/
-│   │   │   ├── Auth/               # Login, Signup
-│   │   │   ├── Eventos/            # Gestión de eventos
-│   │   │   ├── Pueblos/            # Exploración de pueblos
-│   │   │   ├── Favoritos/          # Sistema de favoritos
-│   │   │   ├── Profile/            # Perfil de usuario
-│   │   │   └── Home/               # Página principal
+│   │   │   ├── Footer/             
+│   │   │   ├── Header/           
+│   │   │   └── Main/               
+    │   │      ├── CreateEvent/    
+    │   │      ├── Eventos/   
+        │      │   ├── EventosList/ 
+               │   │   └── EventosCard/             
+        │      │   └── Search/ 
+    │   │      ├── EventosDetalle/    
+               │   │   ├── BotonBorrarEditar/ 
+               │   │   ├── Map/ 
+               │   │   └── BotonFavoritos/             
+    │   │      ├── Favoritos/          
+    │   │      ├── Profile/    
+    │   │      ├── Login/            
+    │   │      ├── Pueblos/    
+        │      │   ├── EventosList/ 
+               │   │   └── EventosCard/             
+        │      │   └── Search/         
+    │   │      ├── PueblosDetalle/
+        │      │   └── Map/ 
+    │   │      ├── Singup/            
+    │   │      └── Home/    
+        │          ├── CTASection/ 
+        │          ├── FeatureSection/ 
+        │          └── SectionCards/             
 │   │   ├── context/                # Context API
+│   │   │   └──  UserContext/        
 │   │   ├── services/               # Servicios API
+│   │   │   ├── EventosService/            # Gestión de eventos
+│   │   │   ├── PueblosService/            # Exploración de pueblos
+│   │   │   ├── FavoritosService/          # Sistema de favoritos
+│   │   │   └── UserService/               # Página principal
 │   │   └── App.jsx                 # Componente principal
 │   └── package.json
-├── src/
-│   ├── config/
-│   │   ├── db_sql.js              # Configuración PostgreSQL
-│   │   ├── jwt.js                 # Configuración JWT
-│   │   └── googleAuth.js          # Configuración OAuth
-│   ├── controller/
-│   │   ├── authController.js      # Lógica de autenticación
-│   │   ├── eventosController.js   # Lógica de eventos
-│   │   ├── pueblosController.js   # Lógica de pueblos
-│   │   ├── favoritosController.js # Lógica de favoritos
-│   │   └── userController.js      # Lógica de usuarios
-│   ├── middleware/
-│   │   ├── authMiddleware.js      # Verificación JWT
-│   │   └── isOwner.js             # Verificación de propiedad
-│   ├── models/
-│   │   └── userModels.js          # Modelos de usuario
-│   └── routes/
-│       ├── authRoutes.js          # Rutas de autenticación
-│       ├── eventosRoutes.js       # Rutas de eventos
-│       ├── pueblosRoutes.js       # Rutas de pueblos
-│       ├── favoritosRoutes.js     # Rutas de favoritos
-│       └── userRoutes.js          # Rutas de usuario
-├── database/
-│   └── schema.sql                 # Esquema de base de datos
-├── .env.example                   # Variables de entorno ejemplo
-├── .gitignore
-├── app.js                         # Aplicación Express
-├── package.json
+│
+├── backend/                          # Backend Nos¡de.js
+    ├── src/
+    │   ├── config/
+    │   │   ├── db_sql.js              # Configuración PostgreSQL
+    │   │   ├── jwt.js                 # Configuración JWT
+    │   │   └── googleAuth.js          # Configuración OAuth
+    │   ├── controller/
+    │   │   ├── authController.js      # Lógica de autenticación
+    │   │   ├── eventosController.js   # Lógica de eventos
+    │   │   ├── pueblosController.js   # Lógica de pueblos
+    │   │   ├── favoritosController.js # Lógica de favoritos
+    │   │   └── userController.js      # Lógica de usuarios
+    │   ├── middleware/
+    │   │   ├── authMiddleware.js      # Verificación JWT
+    │   │   └── isOwner.js             # Verificación de propiedad
+    │   ├── models/
+    │   │   └── userModels.js          # Modelos de usuario
+    │   └── routes/
+    │       ├── authRoutes.js          # Rutas de autenticación
+    │       ├── eventosRoutes.js       # Rutas de eventos
+    │       ├── pueblosRoutes.js       # Rutas de pueblos
+    │       ├── favoritosRoutes.js     # Rutas de favoritos
+    │       └── userRoutes.js          # Rutas de usuario
+    │  
+    ├── index.js
+    ├── .env
+    ├── .gitignore 
+    └── package.json
 └── README.md
 ```
 
