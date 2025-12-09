@@ -1,16 +1,20 @@
 const jwt = require('jsonwebtoken');
 
-const SECRET_KEY = 'tu_clave_secreta_aqui'; // Cambia esto por algo seguro en producción
+const JWT_SECRET = process.env.JWT_SECRET;
+
+if (!JWT_SECRET) {
+    throw new Error('JWT_SECRET no está definido en las variables de entorno');
+}
 
 // Crear token
 const createToken = (payload) => {
-    return jwt.sign(payload, SECRET_KEY, { expiresIn: '1h' }); // Expira en 1 hora
+    return jwt.sign(payload, JWT_SECRET, { expiresIn: '1h' });
 };
 
-// Verificar token (opcional, para proteger rutas)
+// Verificar token
 const verifyToken = (token) => {
     try {
-        return jwt.verify(token, SECRET_KEY);
+        return jwt.verify(token, JWT_SECRET);
     } catch (error) {
         return null;
     }

@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const eventosController = require('../controller/eventosController');
-// const { authMiddleware } = require('../middleware/authMiddleware');
-// const { isOwner } = require('../middleware/isOwner');
+const  authMiddleware = require('../middleware/authMiddleware');
+const  isOwner  = require('../middleware/isOwner');
 
 //[GET] http://localhost:3000/api/eventos
 router.get('/api/eventos', eventosController.getEventos); // Listado público de eventos
@@ -15,14 +15,14 @@ router.get('/api/pueblos/:id/eventos', eventosController.getEventosPorPueblo); /
 
 //[POST] http://localhost:3000/api/eventos
 //router.post('/api/eventos', eventosController.createEvento);
-//router.post('/api/eventos', authMiddleware, eventosController.createEvento); // Crear evento (usuarios logueados)
+router.post('/api/eventos', authMiddleware, eventosController.createEvento); // Crear evento (usuarios logueados)
 
 //[PUT] http://localhost:3000/api/eventos/:id
 //router.put('/api/eventos/:id', eventosController.updateEvento);
-//router.put('/api/eventos/:id', authMiddleware, isOwner, eventosController.updateEvento); // Editar evento (solo propietario)
+router.put('/api/eventos/:id', authMiddleware, isOwner, eventosController.updateEvento); // Editar evento (solo propietario)
 
 //[DELETE] http://localhost:3000/api/eventos/:id
 //router.delete('/api/eventos/:id', eventosController.deleteEvento);
-//router.delete('/api/eventos/:id', authMiddleware, isOwner, eventosController.deleteEvento); // Eliminar evento (solo propietario)
+router.delete('/api/eventos/:id', authMiddleware, isOwner, eventosController.deleteEvento); // Eliminar evento (solo propietario)
 
 module.exports = router;
